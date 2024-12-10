@@ -16,7 +16,8 @@ Examples
 ['data/people1.csv', 'data/people2.csv']
 
 >>> for row in reader:
-....    print(row)
+...    print(row)
+...
 {'id': '1', 'name': 'Odos', 'age': '38'},
 {'id': '2', 'name': 'Kayla', 'age': '31'},
 {'id': '3', 'name': 'Dexter', 'age': 'two'},
@@ -25,7 +26,8 @@ Examples
 {'id': '6', 'name': 'Luke', 'age': '0'}
 
 >>> for name, row in reader.with_names():
-....    print(name, row)
+...    print(name, row)
+...
 'people1' {'id': '1', 'name': 'Odos', 'age': '38'},
 'people1' {'id': '2', 'name': 'Kayla', 'age': '31'},
 'people1' {'id': '3', 'name': 'Dexter', 'age': 'two'},
@@ -34,7 +36,8 @@ Examples
 'people2' {'id': '6', 'name': 'Luke', 'age': '0'}
 
 >>> for path, row in reader.with_paths():
-....    print(path, row)
+...    print(path, row)
+...
 'data/people1.csv' {'id': '1', 'name': 'Odos', 'age': '38'},
 'data/people1.csv' {'id': '2', 'name': 'Kayla', 'age': '31'},
 'data/people1.csv' {'id': '3', 'name': 'Dexter', 'age': 'two'},
