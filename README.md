@@ -1,0 +1,1 @@
+A Python package used to iterate through a directory of csv files and read each row as a dict.
