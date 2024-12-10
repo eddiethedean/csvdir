@@ -8,9 +8,10 @@ import typing
 @dataclass
 class IterPathsCsvDir:
     path: str
+    extension: str = 'csv'
  
     def __post_init__(self) -> None:
-        self.csv_file_paths = glob.glob(os.path.join(self.path, '*.csv'))
+        self.csv_file_paths = glob.glob(os.path.join(self.path, f'*.{self.extension}'))
         self.reader = self.dict_rows()
        
     def dict_rows(self) -> typing.Generator[tuple[str, dict], None, None]:
@@ -42,24 +43,35 @@ class IterCsvDir(IterPathsCsvDir):
         return next(self.reader)
  
  
- 
 @dataclass
 class CsvDir:
     path: str | None = None
+    extension: str = 'csv'
  
     def __post_init__(self) -> None:
         if self.path is None:
             self.path = os.getcwd()
- 
+    
+    @property
+    def paths(self):
+        return glob.glob(os.path.join(self.path, f'*.{self.extension}'))
+    
+    @property
+    def names(self):
+        return [os.path.basename(path) for path in self.paths]
+
     def __iter__(self) -> IterCsvDir:
-        return IterCsvDir(self.path)
+        return IterCsvDir(self.path, extension=self.extension)
  
-    def names(self) -> IterNamesCsvDir:
-        return IterNamesCsvDir(self.path)
+    def with_names(self) -> IterNamesCsvDir:
+        return IterNamesCsvDir(self.path, extension=self.extension)
  
-    def paths(self) -> IterNamesCsvDir:
-        return IterPathsCsvDir(self.path)
+    def with_paths(self) -> IterNamesCsvDir:
+        return IterPathsCsvDir(self.path, extension=self.extension)
     
 
-def read_dir(path: str | None = None) -> CsvDir:
-    return CsvDir(path)
+def read_dir(
+    path: str | None = None,
+    extension: str = 'csv'
+) -> CsvDir:
+    return CsvDir(path, extension)
