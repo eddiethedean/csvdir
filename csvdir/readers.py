@@ -85,4 +85,4 @@ def get_name(path: str) -> str:
 
 
 def get_csv_paths(path: str, extension: str) -> list[str]:
-    return glob.glob(os.path.join(path, f'*.{extension}'))
+    return sorted(glob.glob(os.path.join(path, f'*.{extension}')))
