@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "csvdir"
-version = "0.5.0"
+version = "0.5.1"
 description = "Read all csv files in a directory with one iterator."
 readme = "README.md"
 requires-python = ">=3.9"
