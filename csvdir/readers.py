@@ -116,9 +116,9 @@ class CsvDir:
 
 def read_dir(
     path: str | None = None,
+    *,
     extension: str = 'csv',
     delimiter: str = ',',
-    *,
     chunksize: int | None = None
 ) -> CsvDir | _chunking.CsvChunksDir:
     if chunksize:
