@@ -29,7 +29,6 @@ class IterEnumPathsCsvDir:
         return self
     
 
-@dataclass
 class IterPathsCsvDir(IterEnumPathsCsvDir):
     def dict_rows(self) -> typing.Generator[tuple[str, dict], None, None]:
         for _, full_path, row in IterEnumPathsCsvDir.dict_rows(self):
