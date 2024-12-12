@@ -1,8 +1,11 @@
 from dataclasses import dataclass
 import csv
-import glob
 import os
 import typing
+
+
+from csvdir import pathing as _pathing
+from csvdir import chunking as _chunking
  
  
 @dataclass
@@ -12,7 +15,7 @@ class IterEnumPathsCsvDir:
     delimiter: str = ','
  
     def __post_init__(self) -> None:
-        self.csv_file_paths = get_csv_paths(self.path, self.extension)
+        self.csv_file_paths = _pathing.get_csv_paths(self.path, self.extension)
         self.reader = self.dict_rows()
        
     def dict_rows(self) -> typing.Generator[tuple[int, str, dict], None, None]:
@@ -47,13 +50,13 @@ class IterPathsCsvDir(IterEnumPathsCsvDir):
 class IterEnumNamesCsvDir(IterEnumPathsCsvDir):
     def dict_rows(self) -> typing.Generator[tuple[int, str, dict], None, None]:
         for i, full_path, row in IterEnumPathsCsvDir.dict_rows(self):
-            yield i, get_name(full_path), row
+            yield i, _pathing.get_name(full_path), row
 
 
 class IterNamesCsvDir(IterPathsCsvDir):
     def dict_rows(self) -> typing.Generator[tuple[str, dict], None, None]:
         for full_path, row in IterPathsCsvDir.dict_rows(self):
-            yield get_name(full_path), row
+            yield _pathing.get_name(full_path), row
 
     def enumerate(self):
         return IterEnumNamesCsvDir(self.path, self.extension, self.delimiter)
@@ -92,11 +95,11 @@ class CsvDir:
     
     @property
     def paths(self):
-        return get_csv_paths(self.path, self.extension)
+        return _pathing.get_csv_paths(self.path, self.extension)
     
     @property
     def names(self):
-        return [get_name(path) for path in self.paths]
+        return [_pathing.get_name(path) for path in self.paths]
 
     def __iter__(self) -> IterCsvDir:
         return IterCsvDir(self.path, extension=self.extension, delimiter=self.delimiter)
@@ -114,14 +117,9 @@ class CsvDir:
 def read_dir(
     path: str | None = None,
     extension: str = 'csv',
-    delimiter: str = ','
-) -> CsvDir:
+    delimiter: str = ',',
+    chunksize: int | None = None
+) -> CsvDir | _chunking.CsvChunksDir:
+    if chunksize:
+        return _chunking.CsvChunksDir(chunksize, path, extension, delimiter)
     return CsvDir(path, extension, delimiter)
-
-
-def get_name(path: str) -> str:
-    return os.path.splitext(os.path.basename(path))[0]
-
-
-def get_csv_paths(path: str, extension: str) -> list[str]:
-    return sorted(glob.glob(os.path.join(path, f'*.{extension}')))

@@ -26,7 +26,7 @@ import typing
 from dataclasses import dataclass
 import csv
 
-from csvdir import readers as _readers
+from csvdir import pathing as _pathing
 
 
 Row = dict[str, str]
@@ -67,7 +67,7 @@ class IterEnumPathsCsvChunksDir:
     delimiter: str = ','
 
     def __post_init__(self) -> None:
-        self.csv_file_paths = _readers.get_csv_paths(self.path, self.extension)
+        self.csv_file_paths = _pathing.get_csv_paths(self.path, self.extension)
         self.reader = self.dict_rows()
         self.groups = group_by_columns(self.csv_file_paths, self.delimiter)
 
@@ -116,7 +116,7 @@ class IterPathsCsvChunksDir(IterEnumPathsCsvChunksDir):
 class IterEnumNamesCsvChunksDir(IterEnumPathsCsvChunksDir):
     def dict_rows(self) -> typing.Generator[IndexesNamesChunk, None, None]:
         for indexes, paths, chunk in IterEnumPathsCsvChunksDir.dict_rows(self):
-            yield IndexesNamesChunk(indexes, [_readers.get_name(path) for path in paths], chunk)
+            yield IndexesNamesChunk(indexes, [_pathing.get_name(path) for path in paths], chunk)
                 
     def __next__(self) -> IndexesNamesChunk:
         return next(self.reader)
