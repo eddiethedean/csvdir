@@ -1,4 +1,15 @@
-__version__ = '0.5.1'
+__version__ = '0.7.0'
+from .factory import read_dir
+from .chunk_factory import read_dir_chunks
+from .dir_reader import CsvDir
+from .chunks_dir import CsvChunksDir
+from .concat_file import CsvDirFile
 
-from csvdir.readers import read_dir
-from csvdir.chunking import read_dir_chunks
+__all__ = [
+    "read_dir",
+    "read_dir_chunks",
+    "CsvDir",
+    "CsvChunksDir",
+    "CsvDirFile",
+]
+
