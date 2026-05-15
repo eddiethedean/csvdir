@@ -1,27 +1,62 @@
-# Python
+# Bytecode and caches
 __pycache__/
-*.py[oc]
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Packaging / install artifacts
 build/
 dist/
 wheels/
+*.egg
 *.egg-info/
 .eggs/
+pip-wheel-metadata/
+*.manifest
+*.spec
 
 # Virtual environments
 .venv/
 venv/
+ENV/
+env/
 
-# Tooling
+# Test & coverage
 .pytest_cache/
-.ruff_cache/
-.mypy_cache/
+pytest-cache-files/
 .coverage
+.coverage.*
 htmlcov/
+.tox/
+.nox/
+.hypothesis/
 
-# Editors
+# Type checking & linting
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+
+# Profiling
+*.prof
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Editors & OS
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
 
-# Local
+# Documentation builds
+docs/_build/
+
+# Local / misc
 notebooks/
-pytest-cache-files-*/

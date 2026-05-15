@@ -20,9 +20,7 @@ def read_dir_chunks(
     case_insensitive: bool = True,
     include_hidden: bool = False,
 ) -> CsvChunksDir:
-    """
-    Factory for the chunked directory reader.
-    """
+    """Return a {class}`~csvdir.chunks_dir.CsvChunksDir` for ``path`` with fixed ``chunksize``."""
     return CsvChunksDir(
         chunksize=chunksize,
         path=path,

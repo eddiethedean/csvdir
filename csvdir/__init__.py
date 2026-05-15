@@ -1,3 +1,5 @@
+"""Read every CSV in a directory as one iterator."""
+
 __version__ = "0.9.0"
 
 from .chunks_dir import CsvChunksDir

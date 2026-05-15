@@ -63,6 +63,11 @@ def read_dir(
     case_insensitive: bool = True,
     include_hidden: bool = False,
 ) -> CsvDir | CsvChunksDir:
+    """Discover and iterate CSV files under ``path``.
+
+    Returns {class}`~csvdir.chunks_dir.CsvChunksDir` when ``chunksize`` is set,
+    otherwise {class}`~csvdir.dir_reader.CsvDir`.
+    """
     if chunksize:
         return CsvChunksDir(
             chunksize,

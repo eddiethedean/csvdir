@@ -20,14 +20,10 @@ from .utils import (
 
 
 class CsvChunksDir:
-    """
-    Iterate rows from CSV files in a directory in fixed-size chunks (lists of dicts).
+    """Iterate CSV rows in fixed-size ``list[dict[str, str]]`` chunks.
 
-    Header validation:
-      - If strict_headers is True and expected_headers is None, the first file's header
-        becomes the canonical header. Subsequent files must match.
-      - If expected_headers is provided, every file must match those names.
-      - on_mismatch='skip' skips a non-matching file; 'error' raises ValueError.
+    Header validation matches {class}`~csvdir.dir_reader.CsvDir`: use
+    ``strict_headers``, ``expected_headers``, and ``on_mismatch`` (``'error'`` or ``'skip'``).
     """
 
     def __init__(

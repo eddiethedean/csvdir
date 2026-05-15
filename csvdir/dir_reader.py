@@ -22,6 +22,8 @@ from .utils import (
 
 @dataclass(slots=True)
 class CsvDir:
+    """Iterate rows from all CSV files in a directory as ``dict[str, str]``."""
+
     path: str | None = None
     extension: str = "csv"
     delimiter: str = ","

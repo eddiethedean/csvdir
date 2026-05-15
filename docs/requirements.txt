@@ -1,0 +1,5 @@
+# Installed via pip install -e ".[docs]" — kept for local `pip install -r docs/requirements.txt`
+sphinx>=8.0
+furo>=2024.8.6
+myst-parser>=4.0
+sphinx-autodoc-typehints>=2.0
