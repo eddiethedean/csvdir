@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import io
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator, List, Optional, Tuple
 
 from .pathing import get_csv_paths
-from .utils import pick_encoding, read_header as _read_header
+from .utils import pick_encoding
+from .utils import read_header as _read_header
 
 
 def _strip_bom_from_line(s: str) -> str:
@@ -14,7 +15,7 @@ def _strip_bom_from_line(s: str) -> str:
     return s
 
 
-def _headers_match_seq(file_headers: List[str], canonical: List[str]) -> bool:
+def _headers_match_seq(file_headers: list[str], canonical: list[str]) -> bool:
     return list(file_headers) == list(canonical)
 
 
@@ -35,7 +36,7 @@ class CsvDirFile:
     """
 
     # Directory scanning
-    path: Optional[str] = None
+    path: str | None = None
     extension: str = "csv"
     recurse: bool = False
     case_insensitive: bool = True
@@ -44,7 +45,7 @@ class CsvDirFile:
     # Header parsing / canonical selection
     delimiter: str = ","
     quotechar: str = '"'
-    escapechar: Optional[str] = None
+    escapechar: str | None = None
 
     # IO options
     encoding: str = "utf-8"
@@ -52,18 +53,18 @@ class CsvDirFile:
 
     # Header policy
     strict_headers: bool = False  # kept for API symmetry
-    expected_headers: Optional[List[str]] = None
+    expected_headers: list[str] | None = None
     on_mismatch: str = "error"  # "error" or "skip"
 
     # Internal streaming state
-    _gen: Optional[Iterator[str]] = None     # line generator for the stitched stream
-    _buf: str = ""                           # unread tail from last read
-    _pos: int = 0                            # logical position in the concatenated stream
+    _gen: Iterator[str] | None = None  # line generator for the stitched stream
+    _buf: str = ""  # unread tail from last read
+    _pos: int = 0  # logical position in the concatenated stream
     _closed: bool = False
 
     # -------------------- std io API --------------------
 
-    def __enter__(self) -> "CsvDirFile":
+    def __enter__(self) -> CsvDirFile:
         return self
 
     def __exit__(self, exc_type, exc, tb) -> None:
@@ -158,8 +159,8 @@ class CsvDirFile:
         self._pos += len(line)
         return line
 
-    def readlines(self) -> List[str]:
-        lines: List[str] = []
+    def readlines(self) -> list[str]:
+        lines: list[str] = []
         while True:
             ln = self.readline()
             if not ln:
@@ -182,7 +183,7 @@ class CsvDirFile:
         if self._gen is None:
             self._gen = self._line_generator()
 
-    def _next_line_or_eof(self) -> Optional[str]:
+    def _next_line_or_eof(self) -> str | None:
         assert self._gen is not None
         try:
             return next(self._gen)
@@ -212,7 +213,7 @@ class CsvDirFile:
             yield  # pragma: no cover
 
         # Pre-scan headers deterministically
-        header_index: List[Tuple[str, List[str]]] = []
+        header_index: list[tuple[str, list[str]]] = []
         for p in paths:
             hs = _read_header(
                 p,
@@ -231,12 +232,14 @@ class CsvDirFile:
             if not header_index:
                 return
                 yield  # pragma: no cover
-            def _key(hs: List[str]) -> str:
+
+            def _key(hs: list[str]) -> str:
                 return self.delimiter.join(hs)
+
             canonical = min((hs for _, hs in header_index), key=_key)
 
         # First matching file (for header emission)
-        first_path: Optional[str] = None
+        first_path: str | None = None
         for p, hs in header_index:
             if _headers_match_seq(hs, canonical):
                 first_path = p
@@ -250,7 +253,7 @@ class CsvDirFile:
 
         # Emit header + body of first matching file
         enc = pick_encoding(first_path, self.encoding, self.newline)
-        with open(first_path, "r", encoding=enc, newline=self.newline) as f:
+        with open(first_path, encoding=enc, newline=self.newline) as f:
             header_line = f.readline()
             header_line = _strip_bom_from_line(header_line)
             if header_line and not header_line.endswith(("\n", "\r")):
@@ -269,7 +272,7 @@ class CsvDirFile:
             hs = hdr_map[p]
             if _headers_match_seq(hs, canonical):
                 enc = pick_encoding(p, self.encoding, self.newline)
-                with open(p, "r", encoding=enc, newline=self.newline) as f:
+                with open(p, encoding=enc, newline=self.newline) as f:
                     _ = f.readline()  # skip header
                     for line in f:
                         yield line

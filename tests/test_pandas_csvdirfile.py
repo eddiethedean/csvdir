@@ -1,5 +1,3 @@
-import io
-import sys
 import pytest
 
 pandas = pytest.importorskip("pandas")

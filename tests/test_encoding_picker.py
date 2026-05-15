@@ -1,10 +1,10 @@
 import csvdir
-from pathlib import Path
+
 
 def test_mixed_encodings_autopick(tmp_path):
     # UTF-8 with BOM
     p1 = tmp_path / "bom.csv"
-    p1.write_bytes(b'\xef\xbb\xbf' + "h\n1\n".encode("utf-8"))
+    p1.write_bytes(b"\xef\xbb\xbf" + b"h\n1\n")
 
     # UTF-16-LE without BOM
     p2 = tmp_path / "u16le.csv"

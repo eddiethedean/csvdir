@@ -1,8 +1,9 @@
 import csvdir
 
+
 def test_custom_delimiter_quote_and_encoding(tmp_path, write_csv):
     # pipe-delimited with single-quote quotechar
-    write_csv("x.csv", ["id","name"], [["1","A|B"],["2","C'D"]], delimiter="|")
+    write_csv("x.csv", ["id", "name"], [["1", "A|B"], ["2", "C'D"]], delimiter="|")
     r = csvdir.read_dir(str(tmp_path), delimiter="|", quotechar="'")
     rows = list(r)
     assert rows[0]["name"] == "A|B"

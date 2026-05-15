@@ -1,47 +1,50 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import csv
-from typing import Dict, Iterator, List, Optional
+from collections.abc import Iterator
+from dataclasses import dataclass
 
+from .iter_enum import IterEnumCsvDir
+from .iter_path import IterPathCsvDir
 from .pathing import get_csv_paths
+from .utils import (
+    check_headers as _check_headers,
+)
 from .utils import (
     pick_encoding,
     sniff_quotechar,
-    read_header as _read_header,
-    check_headers as _check_headers,
     strip_bom_from_headers,
 )
-from .iter_path import IterPathCsvDir
-from .iter_enum import IterEnumCsvDir
+from .utils import (
+    read_header as _read_header,
+)
 
 
 @dataclass(slots=True)
 class CsvDir:
-    path: Optional[str] = None
+    path: str | None = None
     extension: str = "csv"
     delimiter: str = ","
     encoding: str = "utf-8"
     newline: str = ""
     quotechar: str = '"'
-    escapechar: Optional[str] = None
+    escapechar: str | None = None
     strict_headers: bool = False
-    expected_headers: Optional[List[str]] = None
+    expected_headers: list[str] | None = None
     on_mismatch: str = "error"  # 'error' or 'skip'
     # directory walking options
     recurse: bool = False
     case_insensitive: bool = True
     include_hidden: bool = False
 
-    def __iter__(self) -> Iterator[Dict[str, str]]:
+    def __iter__(self) -> Iterator[dict[str, str]]:
         for p in self.paths:
-            for row in self._iter_file(p):
-                yield row
+            yield from self._iter_file(p)
 
     # ---------- properties ----------
 
     @property
-    def paths(self) -> List[str]:
+    def paths(self) -> list[str]:
         base = self.path or "."
         return list(
             get_csv_paths(
@@ -54,14 +57,15 @@ class CsvDir:
         )
 
     @property
-    def names(self) -> List[str]:
+    def names(self) -> list[str]:
         # derive stems from discovered paths
         from .pathing import get_name
+
         return [get_name(p) for p in self.paths]
 
     # ---------- internal ----------
 
-    def _iter_file(self, p: str) -> Iterator[Dict[str, str]]:
+    def _iter_file(self, p: str) -> Iterator[dict[str, str]]:
         # header check
         file_headers = _read_header(
             p,
@@ -81,7 +85,7 @@ class CsvDir:
             if not match:
                 if self.on_mismatch == "skip":
                     return
-                detail: List[str] = []
+                detail: list[str] = []
                 if missing:
                     detail.append(f"missing columns: {missing}")
                 if extra:

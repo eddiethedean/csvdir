@@ -1,27 +1,68 @@
 from __future__ import annotations
 
-from typing import Optional, List
-from .dir_reader import CsvDir
+from typing import Literal, overload
+
 from .chunks_dir import CsvChunksDir
+from .dir_reader import CsvDir
 
 
+@overload
 def read_dir(
-    path: Optional[str] = None,
+    path: str | None = None,
     *,
     extension: str = "csv",
     delimiter: str = ",",
-    chunksize: Optional[int] = None,
+    chunksize: None = None,
     encoding: str = "utf-8",
     newline: str = "",
     quotechar: str = '"',
-    escapechar: Optional[str] = None,
+    escapechar: str | None = None,
     strict_headers: bool = False,
-    expected_headers: Optional[List[str]] = None,
-    on_mismatch: str = "error",
+    expected_headers: list[str] | None = None,
+    on_mismatch: Literal["error", "skip"] = "error",
     recurse: bool = False,
     case_insensitive: bool = True,
     include_hidden: bool = False,
-):
+) -> CsvDir: ...
+
+
+@overload
+def read_dir(
+    path: str | None = None,
+    *,
+    extension: str = "csv",
+    delimiter: str = ",",
+    chunksize: int,
+    encoding: str = "utf-8",
+    newline: str = "",
+    quotechar: str = '"',
+    escapechar: str | None = None,
+    strict_headers: bool = False,
+    expected_headers: list[str] | None = None,
+    on_mismatch: Literal["error", "skip"] = "error",
+    recurse: bool = False,
+    case_insensitive: bool = True,
+    include_hidden: bool = False,
+) -> CsvChunksDir: ...
+
+
+def read_dir(
+    path: str | None = None,
+    *,
+    extension: str = "csv",
+    delimiter: str = ",",
+    chunksize: int | None = None,
+    encoding: str = "utf-8",
+    newline: str = "",
+    quotechar: str = '"',
+    escapechar: str | None = None,
+    strict_headers: bool = False,
+    expected_headers: list[str] | None = None,
+    on_mismatch: Literal["error", "skip"] = "error",
+    recurse: bool = False,
+    case_insensitive: bool = True,
+    include_hidden: bool = False,
+) -> CsvDir | CsvChunksDir:
     if chunksize:
         return CsvChunksDir(
             chunksize,

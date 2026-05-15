@@ -1,8 +1,9 @@
 import csvdir
 
+
 def test_chunked_iteration(tmp_path, write_csv):
-    write_csv("a.csv", ["id"], [["1"],["2"],["3"]])
-    write_csv("b.csv", ["id"], [["4"],["5"]])
+    write_csv("a.csv", ["id"], [["1"], ["2"], ["3"]])
+    write_csv("b.csv", ["id"], [["4"], ["5"]])
     rc = csvdir.read_dir(str(tmp_path), chunksize=2)
 
     chunks = list(rc)

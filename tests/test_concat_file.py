@@ -1,8 +1,4 @@
-import io
-import os
-import sys
 import pytest
-
 from csvdir import CsvDirFile
 
 
@@ -15,7 +11,10 @@ def _write_text(path, text, encoding="utf-8", newline="\n"):
 def test_basic_concatenation_header_once(tmp_path):
     # Two matching CSVs -> header should appear once, then all data lines
     _write_text(tmp_path / "a.csv", "id,name\n1,A\n2,B\n")
-    _write_text(tmp_path / "b.csv", "id,name\n3,C\n",)
+    _write_text(
+        tmp_path / "b.csv",
+        "id,name\n3,C\n",
+    )
 
     f = CsvDirFile(str(tmp_path))
     lines = list(f)

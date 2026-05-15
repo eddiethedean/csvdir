@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from .chunks_dir import CsvChunksDir
+
 
 def read_dir_chunks(
     path: str | None,

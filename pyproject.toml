@@ -1,17 +1,67 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
-
 
 [project]
 name = "csvdir"
-version = "0.8.0"
+version = "0.9.0"
 description = "Read all csv files in a directory with one iterator."
 readme = "README.md"
-requires-python = ">=3.8"
-dependencies = []
-license = {text = "MIT License"}
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
 keywords = ["csv", "dict", "dir", "directory", "reader"]
+authors = [{ name = "csvdir contributors" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
 
-[tool.setuptools.packages]
-find = {}
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/eddiethedean/csvdir"
+Repository = "https://github.com/eddiethedean/csvdir"
+Issues = "https://github.com/eddiethedean/csvdir/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["csvdir*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-q", "--strict-markers"]
+filterwarnings = ["error"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["csvdir", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/test_pandas_*.py" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+packages = ["csvdir"]

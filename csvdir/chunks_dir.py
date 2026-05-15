@@ -1,18 +1,22 @@
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Iterator
+import csv
+from collections.abc import Iterator
 
-from .chunks_iter_path import IterPathCsvChunksDir
 from .chunks_iter_enum import IterEnumCsvChunksDir
+from .chunks_iter_path import IterPathCsvChunksDir
 from .pathing import get_csv_paths
 from .utils import (
-    read_header as _read_header,
     check_headers as _check_headers,
+)
+from .utils import (
     pick_encoding,
     sniff_quotechar,
     strip_bom_from_headers,
 )
-import csv
+from .utils import (
+    read_header as _read_header,
+)
 
 
 class CsvChunksDir:
@@ -29,15 +33,15 @@ class CsvChunksDir:
     def __init__(
         self,
         chunksize: int,
-        path: Optional[str],
+        path: str | None,
         extension: str = "csv",
         delimiter: str = ",",
         encoding: str = "utf-8",
         newline: str = "",
         quotechar: str = '"',
-        escapechar: Optional[str] = None,
+        escapechar: str | None = None,
         strict_headers: bool = False,
-        expected_headers: Optional[List[str]] = None,
+        expected_headers: list[str] | None = None,
         on_mismatch: str = "error",
         recurse: bool = False,
         case_insensitive: bool = True,
@@ -60,7 +64,7 @@ class CsvChunksDir:
 
     # ---------------- core iteration ----------------
 
-    def __iter__(self) -> Iterator[List[Dict[str, str]]]:
+    def __iter__(self) -> Iterator[list[dict[str, str]]]:
         canonical = list(self.expected_headers) if self.expected_headers else None
         for p in get_csv_paths(
             self.path or ".",
@@ -86,7 +90,7 @@ class CsvChunksDir:
                 if not match:
                     if self.on_mismatch == "skip":
                         continue
-                    detail: List[str] = []
+                    detail: list[str] = []
                     if missing:
                         detail.append(f"missing columns: {missing}")
                     if extra:
@@ -112,7 +116,7 @@ class CsvChunksDir:
                 if reader.fieldnames:
                     reader.fieldnames = strip_bom_from_headers(reader.fieldnames)
 
-                chunk: List[Dict[str, str]] = []
+                chunk: list[dict[str, str]] = []
                 for row in reader:
                     chunk.append({k: ("" if v is None else str(v)) for k, v in row.items()})
                     if len(chunk) >= self.chunksize:

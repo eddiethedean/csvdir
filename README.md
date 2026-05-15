@@ -191,4 +191,4 @@ print(df.head())
 
 ## 📜 License  
 
-MIT License © 2025  
+MIT License © 2025–2026  

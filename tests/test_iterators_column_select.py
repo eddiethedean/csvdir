@@ -1,6 +1,8 @@
-import csvdir
 import csv
 from pathlib import Path
+
+import csvdir
+
 
 def write(tmp_path: Path, name: str, header, rows, delimiter=","):
     p = tmp_path / name
@@ -10,29 +12,33 @@ def write(tmp_path: Path, name: str, header, rows, delimiter=","):
         w.writerows(rows)
     return p
 
+
 def test_iterpath_iter_column(tmp_path):
-    write(tmp_path, "a.csv", ["id","name"], [[1,"A"],[2,"B"]])
+    write(tmp_path, "a.csv", ["id", "name"], [[1, "A"], [2, "B"]])
     r = csvdir.read_dir(str(tmp_path)).with_paths()
     got = list(r.iter_column("name"))
     assert got == [(str(tmp_path / "a.csv"), "A"), (str(tmp_path / "a.csv"), "B")]
 
+
 def test_iterenum_iter_column(tmp_path):
-    write(tmp_path, "a.csv", ["id","name"], [[1,"A"],[2,"B"]])
+    write(tmp_path, "a.csv", ["id", "name"], [[1, "A"], [2, "B"]])
     r = csvdir.read_dir(str(tmp_path)).enumerate()
     got = list(r.iter_column("name"))
     assert got == [("a.csv", "A"), ("a.csv", "B")]
 
+
 def test_iterpath_select_columns(tmp_path):
-    write(tmp_path, "a.csv", ["id","name","age"], [[1,"A",10],[2,"B",20]])
+    write(tmp_path, "a.csv", ["id", "name", "age"], [[1, "A", 10], [2, "B", 20]])
     r = csvdir.read_dir(str(tmp_path)).with_paths()
-    got = list(r.select_columns(["id","age"]))
+    got = list(r.select_columns(["id", "age"]))
     assert got == [
-        (str(tmp_path / "a.csv"), {"id":"1","age":"10"}),
-        (str(tmp_path / "a.csv"), {"id":"2","age":"20"}),
+        (str(tmp_path / "a.csv"), {"id": "1", "age": "10"}),
+        (str(tmp_path / "a.csv"), {"id": "2", "age": "20"}),
     ]
 
+
 def test_iterenum_select_columns(tmp_path):
-    write(tmp_path, "a.csv", ["id","name","age"], [[1,"A",10]])
+    write(tmp_path, "a.csv", ["id", "name", "age"], [[1, "A", 10]])
     r = csvdir.read_dir(str(tmp_path)).enumerate()
-    got = list(r.select_columns(["name","age"]))
-    assert got == [("a.csv", {"name":"A","age":"10"})]
+    got = list(r.select_columns(["name", "age"]))
+    assert got == [("a.csv", {"name": "A", "age": "10"})]

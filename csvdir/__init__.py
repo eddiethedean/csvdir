@@ -1,10 +1,10 @@
-__version__ = '0.8.0'
+__version__ = "0.9.0"
 
-from .factory import read_dir
-from .chunks_factory import read_dir_chunks
-from .dir_reader import CsvDir
 from .chunks_dir import CsvChunksDir
+from .chunks_factory import read_dir_chunks
 from .concat_file import CsvDirFile
+from .dir_reader import CsvDir
+from .factory import read_dir
 
 __all__ = [
     "read_dir",

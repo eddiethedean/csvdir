@@ -1,5 +1,6 @@
 import csvdir
 
+
 def test_quotechar_detection_when_user_passes_wrong_value(tmp_path):
     # Real quoting uses double quotes around field containing delimiter
     (tmp_path / "a.csv").write_text('id|name\n1|"A|B"\n', encoding="utf-8")

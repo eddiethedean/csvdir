@@ -1,7 +1,7 @@
-from csvdir.dir_reader import CsvDir
-from csvdir.chunks_dir import CsvChunksDir
-from csvdir import read_dir
 import csvdir
+from csvdir import read_dir
+from csvdir.chunks_dir import CsvChunksDir
+from csvdir.dir_reader import CsvDir
 
 
 def test_read_dir_factory_returns_correct_type(tmp_path, write_csv):

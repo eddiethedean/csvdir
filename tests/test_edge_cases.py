@@ -1,5 +1,5 @@
 import csvdir
-import pytest
+
 
 def test_hidden_and_recurse_toggles(tmp_path):
     # Hidden files and nested structure
@@ -21,11 +21,13 @@ def test_hidden_and_recurse_toggles(tmp_path):
     r2 = csvdir.read_dir(str(tmp_path), recurse=True, include_hidden=True)
     assert set(r2.names) == {"visible", "deep", ".h"}
 
+
 def test_escapechar_and_newlines(tmp_path):
     # Use backslash escape to keep delimiter literal
     (tmp_path / "esc.csv").write_text("h\nA\\,B\n", encoding="utf-8")
     rows = list(csvdir.read_dir(str(tmp_path), delimiter=",", escapechar="\\"))
     assert rows[0]["h"] == "A,B"
+
 
 def test_empty_file_and_only_header(tmp_path):
     (tmp_path / "empty.csv").write_text("", encoding="utf-8")
@@ -33,6 +35,7 @@ def test_empty_file_and_only_header(tmp_path):
     r = csvdir.read_dir(str(tmp_path))
     # empty.csv -> no rows; header_only -> no data rows
     assert list(r) == []
+
 
 def test_case_sensitive_extension(tmp_path, monkeypatch):
     # Create uppercase extension

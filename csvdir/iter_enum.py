@@ -1,17 +1,21 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-import os
 import csv
-from typing import Dict, Iterator, List, Optional, Tuple, Generator
+import os
+from collections.abc import Generator, Iterator
+from dataclasses import dataclass, field
 
 from .pathing import get_csv_paths, get_name
 from .utils import (
+    check_headers as _check_headers,
+)
+from .utils import (
     pick_encoding,
     sniff_quotechar,
-    read_header as _read_header,
-    check_headers as _check_headers,
     strip_bom_from_headers,
+)
+from .utils import (
+    read_header as _read_header,
 )
 
 
@@ -24,37 +28,38 @@ class IterEnumCsvDir:
       - enumerate() yields (stem_without_ext, row_dict)
       - iter_column()/select_columns() yield (filename_with_ext, value_or_dict)
     """
-    path: Optional[str] = None
+
+    path: str | None = None
     extension: str = "csv"
     delimiter: str = ","
     encoding: str = "utf-8"
     newline: str = ""
     quotechar: str = '"'
-    escapechar: Optional[str] = None
+    escapechar: str | None = None
     strict_headers: bool = False
-    expected_headers: Optional[List[str]] = None
+    expected_headers: list[str] | None = None
     on_mismatch: str = "error"  # 'error' or 'skip'
     # directory walking options
     recurse: bool = False
     case_insensitive: bool = True
     include_hidden: bool = False
 
-    _it: Optional[Generator[Tuple[str, Dict[str, str]], None, None]] = field(
+    _it: Generator[tuple[str, dict[str, str]], None, None] | None = field(
         init=False, default=None, repr=False
     )
 
     # ---------------- core iterator protocol ----------------
 
-    def __iter__(self) -> "IterEnumCsvDir":
+    def __iter__(self) -> IterEnumCsvDir:
         self._it = self._gen()
         return self
 
-    def __next__(self) -> Tuple[str, Dict[str, str]]:
+    def __next__(self) -> tuple[str, dict[str, str]]:
         if self._it is None:
             self._it = self._gen()
         return next(self._it)
 
-    def _gen(self) -> Generator[Tuple[str, Dict[str, str]], None, None]:
+    def _gen(self) -> Generator[tuple[str, dict[str, str]], None, None]:
         canonical = list(self.expected_headers) if self.expected_headers else None
         for p in get_csv_paths(
             self.path or ".",
@@ -79,7 +84,7 @@ class IterEnumCsvDir:
                 if not match:
                     if self.on_mismatch == "skip":
                         continue
-                    detail: List[str] = []
+                    detail: list[str] = []
                     if missing:
                         detail.append(f"missing columns: {missing}")
                     if extra:
@@ -112,7 +117,7 @@ class IterEnumCsvDir:
 
     # --------------- column selection helpers ---------------
 
-    def iter_column(self, column_name: str) -> Iterator[Tuple[str, str]]:
+    def iter_column(self, column_name: str) -> Iterator[tuple[str, str]]:
         """
         Yield (filename_with_ext, value) for each row of each file for the given column.
         Header checking follows the same rules as enumerate().
@@ -142,7 +147,7 @@ class IterEnumCsvDir:
                 if not match:
                     if self.on_mismatch == "skip":
                         continue
-                    detail: List[str] = []
+                    detail: list[str] = []
                     if missing:
                         detail.append(f"missing columns: {missing}")
                     if extra:
@@ -179,7 +184,7 @@ class IterEnumCsvDir:
                     v = row.get(column_name)
                     yield (name, "" if v is None else str(v))
 
-    def select_columns(self, columns: List[str]) -> Iterator[Tuple[str, Dict[str, str]]]:
+    def select_columns(self, columns: list[str]) -> Iterator[tuple[str, dict[str, str]]]:
         """
         Yield (filename_with_ext, {col:value,...}) for each row of each file for the given columns.
         Header checking follows the same rules as enumerate().
@@ -209,7 +214,7 @@ class IterEnumCsvDir:
                 if not match:
                     if self.on_mismatch == "skip":
                         continue
-                    detail: List[str] = []
+                    detail: list[str] = []
                     if missing:
                         detail.append(f"missing columns: {missing}")
                     if extra:
@@ -244,7 +249,7 @@ class IterEnumCsvDir:
                     reader.fieldnames = strip_bom_from_headers(reader.fieldnames)
 
                 for row in reader:
-                    out: Dict[str, str] = {}
+                    out: dict[str, str] = {}
                     for c in columns:
                         v = row.get(c)
                         out[c] = "" if v is None else str(v)

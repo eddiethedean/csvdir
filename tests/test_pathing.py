@@ -1,5 +1,5 @@
 import csvdir
-from pathlib import Path
+
 
 def test_recurse_and_include_hidden_and_case_insensitive(tmp_path, write_csv):
     # Create nested dirs and hidden entries
