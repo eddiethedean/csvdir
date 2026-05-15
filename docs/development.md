@@ -29,8 +29,7 @@ mypy
 ## Build documentation locally
 
 ```bash
-pip install -e ".[docs]"
-sphinx-build -b html docs docs/_build/html
+sphinx-build -W -b html docs docs/_build/html
 open docs/_build/html/index.html
 ```
 
@@ -43,23 +42,27 @@ sphinx-autobuild docs docs/_build/html --open-browser
 
 ## Continuous integration
 
-GitHub Actions runs on Python 3.10–3.13:
+GitHub Actions (see [`.github/workflows/ci.yml`](https://github.com/eddiethedean/csvdir/blob/main/.github/workflows/ci.yml)):
 
 | Job | Steps |
 |-----|-------|
 | `check` | ruff, mypy |
-| `test` | pytest matrix |
+| `test` | pytest on Python 3.10–3.13 |
 
 ## Documentation hosting
 
-Docs are built on [Read the Docs](https://csvdir.readthedocs.io/) from `.readthedocs.yaml` using Sphinx, the [Furo](https://pradyunsg.me/furo/) theme, and [MyST](https://myst-parser.readthedocs.io/) Markdown.
+Docs are built on [Read the Docs](https://csvdir.readthedocs.io/) from `.readthedocs.yaml` using Sphinx, the [Furo](https://pradyunsg.me/furo/) theme, and [MyST](https://myst-parser.readthedocs.io/) Markdown — same stack as the [StreamTree docs](https://streamtree.readthedocs.io/en/latest/).
 
-To preview RTD builds, open a pull request — RTD creates a preview URL automatically when configured in the project dashboard.
+Open a pull request to trigger an RTD preview build when configured in the project dashboard.
 
 ## Release checklist
 
 1. Update version in `csvdir/__init__.py` and `pyproject.toml`
-2. Update `docs/changelog.md`
-3. Run tests, ruff, mypy, and `sphinx-build` with `-W` (warnings as errors)
+2. Update [CHANGELOG](CHANGELOG.md)
+3. Run tests, ruff, mypy, and `sphinx-build -W`
 4. Tag and publish to PyPI
-5. Confirm RTD builds the `latest` docs
+5. Confirm RTD builds `latest`
+
+## Repository README
+
+Contributing conventions, badges, and quick usage live in the canonical [README on GitHub](https://github.com/eddiethedean/csvdir/blob/main/README.md).

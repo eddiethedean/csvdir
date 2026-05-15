@@ -36,12 +36,14 @@ root_doc = "index"
 
 html_theme = "furo"
 html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 html_title = "csvdir"
 html_theme_options = {
     "source_repository": "https://github.com/eddiethedean/csvdir",
     "source_branch": "main",
     "source_directory": "docs/",
-    "light_logo": None,
+    "navigation_with_keys": True,
+    "top_of_page_button": "edit",
     "footer_icons": [
         {
             "name": "GitHub",
@@ -50,6 +52,13 @@ html_theme_options = {
             "class": "fa-brands fa-github",
         },
     ],
+}
+
+html_meta = {
+    "description": (
+        "csvdir — read every CSV in a directory with one iterator. "
+        "Install, guides, configuration, and API reference."
+    ),
 }
 
 myst_enable_extensions = [
@@ -80,3 +89,15 @@ intersphinx_mapping = {
 }
 
 pygments_style = "sphinx"
+
+# Flat sidebar: Getting started and Changelog appear at the top level (StreamTree-style).
+html_sidebars = {
+    "**": [
+        "sidebar/scroll-start.html",
+        "sidebar/brand.html",
+        "sidebar/search.html",
+        "sidebar/navigation.html",
+        "sidebar/ethical-ads.html",
+        "sidebar/scroll-end.html",
+    ],
+}

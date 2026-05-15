@@ -8,18 +8,18 @@
 
 Read every CSV in a directory as one stream of rows — no manual file loops, no header surprises.
 
-**csvdir** is a small, dependency-free library for treating a folder of CSV files like a single dataset. **Documentation:** [readthedocs](https://csvdir.readthedocs.io/en/latest/) · [docs source](https://github.com/eddiethedean/csvdir/tree/main/docs)
+**csvdir** is a small, dependency-free library for treating a folder of CSV files like a single dataset. **Documentation:** [csvdir.readthedocs.io](https://csvdir.readthedocs.io/en/latest/) · [docs source on GitHub](https://github.com/eddiethedean/csvdir/tree/main/docs)
 
 ## Features
 
-- [**Directory-wide iteration**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/iteration.md) — stream rows from all matching files in sorted order
-- [**Header validation**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/headers.md) — lock to a schema, auto-adopt the first file’s headers, or skip mismatches
-- [**Chunked reading**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/chunking.md) — `chunksize` for memory-friendly batches
-- [**Dialect & encoding**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/encodings.md) — `delimiter`, `quotechar`, `encoding`, BOM handling, and more
-- [**File discovery**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/discovery.md) — recursive scan, extensions, hidden files
-- [**Column helpers**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/columns.md) — single-column or multi-column views with file labels
-- [**Pandas integration**](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/pandas.md) — `CsvDirFile` for `pandas.read_csv`
-- **Typed** — ships with [`py.typed`](https://github.com/eddiethedean/csvdir/blob/main/csvdir/py.typed) ([API reference](https://github.com/eddiethedean/csvdir/blob/main/docs/reference/index.md))
+- [**Directory-wide iteration**](https://csvdir.readthedocs.io/en/latest/guide/iteration.html) — stream rows from all matching files in sorted order
+- [**Header validation**](https://csvdir.readthedocs.io/en/latest/guide/headers.html) — lock to a schema, auto-adopt the first file’s headers, or skip mismatches
+- [**Chunked reading**](https://csvdir.readthedocs.io/en/latest/guide/chunking.html) — `chunksize` for memory-friendly batches
+- [**Dialect & encoding**](https://csvdir.readthedocs.io/en/latest/guide/encodings.html) — `delimiter`, `quotechar`, `encoding`, BOM handling, and more
+- [**File discovery**](https://csvdir.readthedocs.io/en/latest/guide/discovery.html) — recursive scan, extensions, hidden files
+- [**Column helpers**](https://csvdir.readthedocs.io/en/latest/guide/columns.html) — single-column or multi-column views with file labels
+- [**Pandas integration**](https://csvdir.readthedocs.io/en/latest/guide/pandas.html) — `CsvDirFile` for `pandas.read_csv`
+- **Typed** — ships with [`py.typed`](https://github.com/eddiethedean/csvdir/blob/main/csvdir/py.typed) ([API reference](https://csvdir.readthedocs.io/en/latest/reference/index.html))
 
 ## Installation
 
@@ -27,7 +27,7 @@ Read every CSV in a directory as one stream of rows — no manual file loops, no
 pip install csvdir
 ```
 
-Requires **Python 3.10+**. No runtime dependencies. See the [installation guide](https://github.com/eddiethedean/csvdir/blob/main/docs/installation.md) for editable installs and optional extras.
+Requires **Python 3.10+**. No runtime dependencies. See [Getting started](https://csvdir.readthedocs.io/en/latest/getting-started/) for install and optional extras.
 
 ## Quick start
 
@@ -40,19 +40,19 @@ for row in read_dir("/data/csvs"):
 # {'id': '2', 'name': 'Bob', 'age': '25'}
 ```
 
-More examples: [Quickstart](https://github.com/eddiethedean/csvdir/blob/main/docs/quickstart.md)
+More examples: [Getting started](https://csvdir.readthedocs.io/en/latest/getting-started/)
 
 ## Usage
 
 | Topic | Guide |
 |-------|--------|
-| Row iteration, `with_names()`, `with_paths()` | [Iteration](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/iteration.md) |
-| `strict_headers`, `expected_headers`, `on_mismatch` | [Headers](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/headers.md) |
-| `chunksize`, `read_dir_chunks` | [Chunking](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/chunking.md) |
-| `iter_column`, `select_columns` | [Columns](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/columns.md) |
-| `recurse`, `extension`, hidden files | [Discovery](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/discovery.md) |
-| `CsvDirFile` + pandas | [Pandas](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/pandas.md) |
-| Encodings, BOM, quote sniffing | [Encodings](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/encodings.md) |
+| Row iteration, `with_names()`, `with_paths()` | [Iteration](https://csvdir.readthedocs.io/en/latest/guide/iteration.html) |
+| `strict_headers`, `expected_headers`, `on_mismatch` | [Headers](https://csvdir.readthedocs.io/en/latest/guide/headers.html) |
+| `chunksize`, `read_dir_chunks` | [Chunking](https://csvdir.readthedocs.io/en/latest/guide/chunking.html) |
+| `iter_column`, `select_columns` | [Columns](https://csvdir.readthedocs.io/en/latest/guide/columns.html) |
+| `recurse`, `extension`, hidden files | [Discovery](https://csvdir.readthedocs.io/en/latest/guide/discovery.html) |
+| `CsvDirFile` + pandas | [Pandas](https://csvdir.readthedocs.io/en/latest/guide/pandas.html) |
+| Encodings, BOM, quote sniffing | [Encodings](https://csvdir.readthedocs.io/en/latest/guide/encodings.html) |
 
 ### Row iteration
 
@@ -69,7 +69,7 @@ for path, row in read_dir("/data/csvs").with_paths():
     ...
 ```
 
-Details: [Iteration guide](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/iteration.md)
+Details: [Iteration guide](https://csvdir.readthedocs.io/en/latest/guide/iteration.html)
 
 ### Header validation
 
@@ -84,7 +84,7 @@ for row in read_dir(
     ...
 ```
 
-Details: [Headers guide](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/headers.md)
+Details: [Headers guide](https://csvdir.readthedocs.io/en/latest/guide/headers.html)
 
 ### Chunked iteration
 
@@ -93,7 +93,7 @@ for chunk in read_dir("/data/csvs", chunksize=1000):
     process(chunk)  # list[dict[str, str]]
 ```
 
-Details: [Chunking guide](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/chunking.md)
+Details: [Chunking guide](https://csvdir.readthedocs.io/en/latest/guide/chunking.html)
 
 ### Column selection
 
@@ -107,7 +107,7 @@ for name, row in r.with_names().select_columns(["name", "age"]):
     ...
 ```
 
-Details: [Columns guide](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/columns.md)
+Details: [Columns guide](https://csvdir.readthedocs.io/en/latest/guide/columns.html)
 
 ### Pandas
 
@@ -118,13 +118,13 @@ from csvdir import CsvDirFile
 df = pd.read_csv(CsvDirFile("/data/csvs", on_mismatch="skip"))
 ```
 
-Details: [Pandas guide](https://github.com/eddiethedean/csvdir/blob/main/docs/guide/pandas.md)
+Details: [Pandas guide](https://csvdir.readthedocs.io/en/latest/guide/pandas.html)
 
 ## Configuration & API
 
-- [**Full option reference**](https://github.com/eddiethedean/csvdir/blob/main/docs/reference/options.md) — every `read_dir` / `CsvDirFile` parameter
-- [**API reference**](https://github.com/eddiethedean/csvdir/blob/main/docs/reference/index.md) — autodoc for all public types and functions
-- [**Changelog**](https://github.com/eddiethedean/csvdir/blob/main/docs/changelog.md)
+- [**Full option reference**](https://csvdir.readthedocs.io/en/latest/reference/options.html) — every `read_dir` / `CsvDirFile` parameter
+- [**API reference**](https://csvdir.readthedocs.io/en/latest/reference/index.html) — autodoc for all public types and functions
+- [**Changelog**](https://csvdir.readthedocs.io/en/latest/CHANGELOG.html)
 
 ## Development
 
@@ -139,8 +139,8 @@ mypy
 sphinx-build -b html docs docs/_build/html
 ```
 
-See the [development guide](https://github.com/eddiethedean/csvdir/blob/main/docs/development.md). CI: [`.github/workflows/ci.yml`](https://github.com/eddiethedean/csvdir/blob/main/.github/workflows/ci.yml) (ruff, mypy, pytest on Python 3.10–3.13).
+See the [development guide](https://csvdir.readthedocs.io/en/latest/development.html). CI: [`.github/workflows/ci.yml`](https://github.com/eddiethedean/csvdir/blob/main/.github/workflows/ci.yml) (ruff, mypy, pytest on Python 3.10–3.13).
 
 ## License
 
-MIT © 2025–2026 — see [LICENSE](https://github.com/eddiethedean/csvdir/blob/main/LICENSE). Release notes: [changelog](https://github.com/eddiethedean/csvdir/blob/main/docs/changelog.md).
+MIT © 2025–2026 — see [LICENSE](https://github.com/eddiethedean/csvdir/blob/main/LICENSE). Release notes: [Changelog](https://csvdir.readthedocs.io/en/latest/CHANGELOG/).

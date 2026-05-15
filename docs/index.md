@@ -1,19 +1,66 @@
+---
+description: csvdir — read every CSV in a directory with one iterator. Install, guides, and API reference.
+---
+
 # csvdir
 
-**csvdir** reads every CSV in a directory as one stream of rows. No manual file loops, no surprise headers — just iteration, chunking, and optional pandas integration.
+**Read every CSV in a directory as one stream of rows.** Treat a folder of CSV files as one dataset — discovery, headers, chunking, and optional [pandas](https://pandas.pydata.org/) integration with zero runtime dependencies.
 
-```{toctree}
-:maxdepth: 2
-:caption: Getting started
+```{admonition} Beta software
+:class: warning
 
-installation
-quickstart
+APIs may evolve between releases. Pin versions in production and read [Changelog](CHANGELOG.md) when upgrading.
 ```
 
-```{toctree}
-:maxdepth: 2
-:caption: User guide
+- **Get started**
 
+---
+
+Install, mental model, and next steps in [Getting started](getting-started.md).
+
+- **User guide**
+
+---
+
+Iteration, headers, chunking, columns, discovery, encodings, and pandas in the [Guides overview](guides/index.md).
+
+- **Configuration**
+
+---
+
+Every `read_dir` and `CsvDirFile` parameter in [Configuration reference](reference/options.md).
+
+- **API reference**
+
+---
+
+Autodoc for factories, readers, iterators, and utilities — see **API reference** in the sidebar.
+
+- **Development**
+
+---
+
+Local setup, tests, linting, and doc builds in [Development](development.md).
+
+## Install (quick)
+
+```bash
+pip install csvdir
+```
+
+Optional dev/docs extras (`[dev]`, `[docs]`) are described in [Getting started](getting-started.md).
+
+## Canonical README
+
+The root [README on GitHub](https://github.com/eddiethedean/csvdir/blob/main/README.md) remains the single source for PyPI: feature list, usage snippets, badges, and links to this site.
+
+```{toctree}
+:hidden:
+:maxdepth: 1
+
+getting-started
+CHANGELOG
+guides/index
 guide/iteration
 guide/headers
 guide/chunking
@@ -21,53 +68,7 @@ guide/columns
 guide/discovery
 guide/pandas
 guide/encodings
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: Reference
-
 reference/index
 reference/options
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Project
-
 development
-changelog
 ```
-
-## Why csvdir?
-
-Data often arrives as many CSV files in one folder — exports by date, shards by region, or pipeline chunks. **csvdir** gives you:
-
-- A **single iterator** over all files in sorted path order
-- **Per-file** encoding and quote detection
-- **Header policies** that match real pipelines (strict, skip, or explicit schema)
-- **Memory-safe chunking** for large directories
-- A **file-like object** for `pandas.read_csv`
-
-The library has **zero runtime dependencies** and ships with type hints (`py.typed`).
-
-## Minimal example
-
-```python
-from csvdir import read_dir
-
-for row in read_dir("/data/csvs"):
-    print(row["name"])
-```
-
-## Public API
-
-| Name | Role |
-|------|------|
-| {func}`read_dir` | Main factory — row or chunked reader |
-| {func}`read_dir_chunks` | Explicit chunked factory |
-| {class}`CsvDir` | Row-by-row directory reader |
-| {class}`CsvChunksDir` | Fixed-size chunk reader |
-| {class}`CsvDirFile` | Concatenated CSV stream for pandas |
-
-See the {doc}`User guide <guide/iteration>` and {doc}`API reference <reference/index>` for full details.
