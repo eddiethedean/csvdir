@@ -9,7 +9,7 @@ description: csvdir — read every CSV in a directory with one iterator. Install
 ```{admonition} Beta software
 :class: warning
 
-APIs may evolve between releases. Pin versions in production and read [Changelog](CHANGELOG.md) when upgrading.
+APIs may evolve between releases. Pin versions in production and read [Changelog](CHANGELOG) when upgrading.
 ```
 
 - **Get started**

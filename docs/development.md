@@ -61,7 +61,7 @@ Open a pull request to trigger an RTD preview build when configured in the proje
 ## Release checklist
 
 1. Update version in `csvdir/__init__.py` and `pyproject.toml`
-2. Update [CHANGELOG](CHANGELOG.md)
+2. Update [CHANGELOG](CHANGELOG)
 3. Run tests, ruff, mypy, and `sphinx-build -W`
 4. Tag and publish to PyPI
 5. Confirm RTD builds `latest`

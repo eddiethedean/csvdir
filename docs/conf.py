@@ -78,7 +78,7 @@ autodoc_default_options = {
 }
 autodoc_typehints = "description"
 autodoc_typehints_format = "short"
-autosummary_generate = True
+autosummary_generate = False
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
 
