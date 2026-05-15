@@ -45,8 +45,8 @@ def test_pandas_chunksize_iteration(tmp_path):
 
 
 def test_pandas_skip_bad_header_on_mismatch_skip(tmp_path):
-    _write_text(tmp_path / "good.csv", "id,name\n1,A\n")
-    _write_text(tmp_path / "bad.csv", "name,id\nX,99\n")  # swapped
+    _write_text(tmp_path / "aaa_good.csv", "id,name\n1,A\n")
+    _write_text(tmp_path / "zzz_bad.csv", "name,id\nX,99\n")  # swapped
 
     f = CsvDirFile(str(tmp_path), strict_headers=True, on_mismatch="skip")
     df = pandas.read_csv(f)
@@ -56,8 +56,8 @@ def test_pandas_skip_bad_header_on_mismatch_skip(tmp_path):
 
 
 def test_pandas_mismatch_raises_when_error(tmp_path):
-    _write_text(tmp_path / "good.csv", "id,name\n1,A\n")
-    _write_text(tmp_path / "bad.csv", "name,id\nX,99\n")
+    _write_text(tmp_path / "aaa_good.csv", "id,name\n1,A\n")
+    _write_text(tmp_path / "zzz_bad.csv", "name,id\nX,99\n")
 
     f = CsvDirFile(str(tmp_path), strict_headers=True, on_mismatch="error")
     with pytest.raises(ValueError):

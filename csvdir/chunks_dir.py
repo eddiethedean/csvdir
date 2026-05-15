@@ -22,6 +22,8 @@ from .utils import (
 class CsvChunksDir:
     """Iterate CSV rows in fixed-size ``list[dict[str, str]]`` chunks.
 
+    ``chunksize`` must be a positive integer.
+
     Header validation matches {class}`~csvdir.dir_reader.CsvDir`: use
     ``strict_headers``, ``expected_headers``, and ``on_mismatch`` (``'error'`` or ``'skip'``).
     """
@@ -43,7 +45,10 @@ class CsvChunksDir:
         case_insensitive: bool = True,
         include_hidden: bool = False,
     ) -> None:
-        self.chunksize = int(chunksize)
+        cs = int(chunksize)
+        if cs <= 0:
+            raise ValueError("chunksize must be a positive integer")
+        self.chunksize = cs
         self.path = path
         self.extension = extension
         self.delimiter = delimiter

@@ -20,7 +20,13 @@ def read_dir_chunks(
     case_insensitive: bool = True,
     include_hidden: bool = False,
 ) -> CsvChunksDir:
-    """Return a {class}`~csvdir.chunks_dir.CsvChunksDir` for ``path`` with fixed ``chunksize``."""
+    """Return a {class}`~csvdir.chunks_dir.CsvChunksDir` for ``path`` with fixed ``chunksize``.
+
+    Raises:
+        ValueError: if ``chunksize`` is less than ``1``.
+    """
+    if chunksize <= 0:
+        raise ValueError("chunksize must be a positive integer")
     return CsvChunksDir(
         chunksize=chunksize,
         path=path,

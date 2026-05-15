@@ -53,7 +53,7 @@ The recommended value for `csv` module compatibility (platform newlines inside q
 
 ## Mixed encodings in one directory
 
-This is supported: each file is opened with its own detected encoding. There is no global assumption that all files share one encoding.
+This is supported: each file is opened with its own detected encoding. There is no global assumption that all files share one encoding. The same mechanism applies when [`CsvDirFile`](pandas.md) opens each file while building the stitched stream.
 
 ## Limitations
 

@@ -1,6 +1,8 @@
 # Getting started
 
-csvdir discovers CSV files in a directory and yields each row as a `dict[str, str]` — or in fixed-size chunks when you set `chunksize`. No manual `glob`, no per-file `open` loops.
+csvdir discovers CSV files in a directory and yields each row as a `dict[str, str]` — or in fixed-size chunks when you set `chunksize` (must be ≥ 1). No manual `glob`, no per-file `open` loops.
+
+Column **names** are matched across files as **sets** for `read_dir`; [`CsvDirFile`](guide/pandas.md) (pandas) stitches a single header and requires matching **sequences** — see [Headers](guide/headers.md).
 
 !!! note "Requirements"
 
@@ -33,7 +35,7 @@ pip install pandas        # only for pandas.read_csv + CsvDirFile
 
 1. Point `read_dir` at a directory (default `"."`).
 2. Iterate rows — one `dict` per CSV row, all files in sorted path order.
-3. Optionally attach file labels with `.with_names()` or `.with_paths()`, or batch rows with `chunksize`.
+3. Optionally attach file labels with `.with_names()` or `.with_paths()`, or batch rows with `chunksize` (**≥ 1**; invalid sizes raise `ValueError`).
 
 The **[Iteration guide](guide/iteration.md)** walks through discovery order, properties, and helper iterators.
 

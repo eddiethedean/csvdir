@@ -22,7 +22,14 @@ from .utils import (
 
 @dataclass(slots=True)
 class CsvDir:
-    """Iterate rows from all CSV files in a directory as ``dict[str, str]``."""
+    """Iterate rows from all CSV files in a directory as ``dict[str, str]``.
+
+    Header checks use column **names as sets** (order-independent); see ``CsvDirFile``
+    for order-sensitive stitched streams.
+
+    With ``strict_headers``, the pinned schema follows the **first sorted file**
+    inside that iteration only (``expected_headers`` is not mutated).
+    """
 
     path: str | None = None
     extension: str = "csv"
@@ -40,8 +47,12 @@ class CsvDir:
     include_hidden: bool = False
 
     def __iter__(self) -> Iterator[dict[str, str]]:
+        # Mirrors ``IterPathCsvDir`` — running canonical stored in ``cell``, not ``self``.
+        cell: list[list[str] | None] = [
+            list(self.expected_headers) if self.expected_headers else None
+        ]
         for p in self.paths:
-            yield from self._iter_file(p)
+            yield from self._iter_file_rows(p, cell)
 
     # ---------- properties ----------
 
@@ -67,8 +78,7 @@ class CsvDir:
 
     # ---------- internal ----------
 
-    def _iter_file(self, p: str) -> Iterator[dict[str, str]]:
-        # header check
+    def _iter_file_rows(self, p: str, cell: list[list[str] | None]) -> Iterator[dict[str, str]]:
         file_headers = _read_header(
             p,
             encoding=self.encoding,
@@ -77,11 +87,9 @@ class CsvDir:
             quotechar=self.quotechar,
             escapechar=self.escapechar,
         )
-
-        expected = self.expected_headers
-        if self.strict_headers and expected is None:
-            self.expected_headers = file_headers
-            expected = file_headers
+        if self.strict_headers and cell[0] is None:
+            cell[0] = file_headers
+        expected = cell[0] or self.expected_headers
         if expected is not None:
             match, missing, extra = _check_headers(file_headers, expected)
             if not match:

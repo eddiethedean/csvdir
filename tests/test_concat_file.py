@@ -24,8 +24,9 @@ def test_basic_concatenation_header_once(tmp_path):
 
 def test_skips_header_on_matching_only(tmp_path):
     # Second file has mismatched header -> skip when on_mismatch='skip'
-    _write_text(tmp_path / "good.csv", "id,name\n1,A\n")
-    _write_text(tmp_path / "bad.csv", "name,id\nX,99\n")
+    # Filenames prefixed so canonical "first sorted file" picks the id,name schema.
+    _write_text(tmp_path / "aaa_good.csv", "id,name\n1,A\n")
+    _write_text(tmp_path / "zzz_bad.csv", "name,id\nX,99\n")
 
     f = CsvDirFile(str(tmp_path), on_mismatch="skip", strict_headers=True)
     lines = list(f)
@@ -34,8 +35,8 @@ def test_skips_header_on_matching_only(tmp_path):
 
 
 def test_mismatch_raises_when_error(tmp_path):
-    _write_text(tmp_path / "good.csv", "id,name\n1,A\n")
-    _write_text(tmp_path / "bad.csv", "name,id\nX,99\n")
+    _write_text(tmp_path / "aaa_good.csv", "id,name\n1,A\n")
+    _write_text(tmp_path / "zzz_bad.csv", "name,id\nX,99\n")
 
     f = CsvDirFile(str(tmp_path), on_mismatch="error", strict_headers=True)
     with pytest.raises(ValueError):
@@ -67,7 +68,7 @@ def test_readline_and_read_methods(tmp_path):
     # then one by one
     assert f.readline() == "1\n"
     assert f.readline() == "2\n"
-    # read() returns the rest (not strictly size-aware yet)
+    # read(); uses string length semantics for size chunks (pandas-compatible)
     rest = f.read()
     assert rest == "3\n"
     # EOF

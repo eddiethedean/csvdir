@@ -7,8 +7,8 @@ Step-by-step documentation for every major feature. Start with [Getting started]
 | Guide | Topics |
 |-------|--------|
 | [Iteration](../guide/iteration.md) | `read_dir`, `CsvDir`, `with_names`, `with_paths`, file order |
-| [Headers](../guide/headers.md) | `strict_headers`, `expected_headers`, `on_mismatch` |
-| [Chunking](../guide/chunking.md) | `chunksize`, `read_dir_chunks`, column chunks |
+| [Headers](../guide/headers.md) | Set vs sequence headers (`read_dir` vs `CsvDirFile`), `strict_headers`, `expected_headers`, `on_mismatch` |
+| [Chunking](../guide/chunking.md) | `chunksize ≥ 1`, `read_dir_chunks`, column chunks |
 | [Columns](../guide/columns.md) | `iter_column`, `select_columns`, labels |
 
 ## Files and formats

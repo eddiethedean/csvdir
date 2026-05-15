@@ -6,7 +6,7 @@ csvdir can enforce that every file in a directory shares the same columns before
 
 Header comparison uses **column names as a set**:
 
-- Order of columns in the file does not matter
+- Order of columns in the file does not matter across files covered by dict readers
 - Extra or missing column names trigger a mismatch
 
 ```python
@@ -16,12 +16,23 @@ Header comparison uses **column names as a set**:
 # File C: id,name       → mismatch (missing age)
 ```
 
-When a mismatch is detected, behavior depends on `on_mismatch`:
+When that kind of mismatch is detected, behavior depends on `on_mismatch`:
 
 | Value | Behavior |
 |-------|----------|
 | `"error"` (default) | Raise `ValueError` with missing/extra column detail |
 | `"skip"` | Skip the entire file (no rows yielded from it) |
+
+### Regression check: reorder vs `CsvDirFile`
+
+Because matching is **set-based**, permuting header order between files **does not** count as mismatch for `read_dir`:
+
+```python
+# aaa.csv  →  id,name
+# zzz.csv  →  name,id   → still OK for read_dir(...)
+```
+
+[`CsvDirFile`](pandas.md) requires the header **sequence** to match — see below.
 
 ## `strict_headers`
 
@@ -29,9 +40,9 @@ When a mismatch is detected, behavior depends on `on_mismatch`:
 read_dir("/data", strict_headers=True)
 ```
 
-1. Read the **first** file (in sorted path order).
-2. Store its header as the expected schema (unless `expected_headers` is already set).
-3. For each subsequent file, compare headers to that schema.
+1. Read files in sorted path order (see [Discovery](discovery.md)).
+2. The **first file’s column set** establishes the pinned schema unless `expected_headers` is already set.
+3. For each subsequent file, compare headers to that schema (**order ignored**).
 
 Combine with `on_mismatch="skip"` to build a stream from only compatible files:
 
@@ -39,6 +50,8 @@ Combine with `on_mismatch="skip"` to build a stream from only compatible files:
 for row in read_dir("/data", strict_headers=True, on_mismatch="skip"):
     ...
 ```
+
+Iteration does **not** mutate the `CsvDir.expected_headers` field; the pinned schema applies only inside that iteration.
 
 ## `expected_headers`
 
@@ -61,26 +74,30 @@ Mismatch errors look like:
 ValueError: Header mismatch in '/data/bad.csv': missing columns: ['age']; extra columns: ['years']
 ```
 
-## `CsvDirFile` (pandas) — different rules
+## `CsvDirFile` (pandas) — stricter stitching rules
 
-`CsvDirFile` compares headers **in order** (sequence-sensitive) when stitching files. It also picks a **canonical** header row:
+`CsvDirFile` builds one physical CSV header line followed by concatenated bodies. Stitching compares headers **in order** (sequence-sensitive): the emitted header establishes column order, and subsequent files must match that header line exactly (after normalization). That is stronger than dict iterators, which compare **sets** of names.
 
-- If `expected_headers` is set, that list is canonical.
-- Otherwise the lexicographically smallest header (joined by `delimiter`) among discovered files is chosen.
+Choose the canonical sequence this way:
 
-The first file whose header **exactly matches** the canonical sequence supplies the emitted header line; other matching files have their header line skipped. Non-matching files are skipped or raise according to `on_mismatch`.
+- If `expected_headers` is set, that list defines canonical column order.
+- Else if `strict_headers` is True, canonical order is taken from **the first discovered file** in sorted path order (same sorting as `CsvDir`). Name files so your intended baseline sorts first — e.g. `aaa_main.csv`, `zzz_extra.csv`.
 
-For dict-based iteration, prefer `CsvDir` semantics. For pandas, understand that column **order** matters in the stitched stream.
+Otherwise the canonical sequence is the lexicographically smallest `delimiter`-joined header among scanned files.
 
-## Recipes
+**Row order:** body lines appear in sorted file path order, matching traversal order used by [`CsvDir`](iteration.md).
 
-### Adopt first file, fail on drift
+For pandas, assume column **order** in the stitched stream matters. For tolerant column-set matching alone, iterate with [`read_dir`](../getting-started.md) first.
+
+## Recipes (`read_dir`)
+
+### Pin first file schema, fail on drift
 
 ```python
 read_dir("/data", strict_headers=True, on_mismatch="error")
 ```
 
-### Adopt first file, ignore drift
+### Pin first file schema, skip incompatible files
 
 ```python
 read_dir("/data", strict_headers=True, on_mismatch="skip")

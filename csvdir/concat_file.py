@@ -23,16 +23,30 @@ def _headers_match_seq(file_headers: list[str], canonical: list[str]) -> bool:
 class CsvDirFile:
     """
     File-like object that concatenates CSV files in a directory into one logical CSV stream.
-    - Emits the header once (from the first matching file).
-    - Skips headers on later files only if they match the canonical header (sequence-sensitive).
+    Emit one header line, then bodies in **sorted file path order**
+    (same discovery order as ``CsvDir``).
+
+    Stitching compares headers **in sequence** — the emitted header fixes column order.
+    ``CsvDir`` / ``read_dir`` treat header **names as sets**, so columns may be permuted
+    across files.
+
+    Canonical header sequence:
+
+    - If ``expected_headers`` is set, that list is canonical.
+    - Else if ``strict_headers`` is true, use the **first discovered** file after sorting
+      (same rule as ``CsvDir``).
+    - Else choose the lexicographically smallest ``delimiter``.join(headers) among scanned files.
+
+    Matching files contribute their body lines after the sole header emit; mismatches skip or raise
+    according to ``on_mismatch``.
 
     pandas compatibility:
-      - read(size=-1), readline(), readlines(), iteration
-      - seek(0) to restart (other seeks raise)
-      - tell(), readable(), seekable(), close(), context manager
 
-    Note: We keep a small string buffer to satisfy size-bounded reads. Data is produced lazily from
-    the underlying files; we do not load everything into memory.
+    - read(size=-1), readline(), readlines(); ``size`` uses Python string/code-unit counts.
+    - seek(0) to restart (other seeks raise).
+    - tell(), readable(), seekable(), close(), context manager.
+
+    Data is lazy; directory contents are not fully buffered in memory.
     """
 
     # Directory scanning
@@ -52,7 +66,7 @@ class CsvDirFile:
     newline: str = ""
 
     # Header policy
-    strict_headers: bool = False  # kept for API symmetry
+    strict_headers: bool = False
     expected_headers: list[str] | None = None
     on_mismatch: str = "error"  # "error" or "skip"
 
@@ -193,15 +207,7 @@ class CsvDirFile:
             return None
 
     def _line_generator(self) -> Iterator[str]:
-        """
-        Build a continuous CSV stream with a single header:
-          1) List files (deterministic).
-          2) Pre-scan headers using utils.read_header.
-          3) Choose canonical header (expected or lexicographically smallest).
-          4) Emit the header+body from first matching file.
-          5) For remaining files: if header matches -> skip header then emit body;
-             else skip or raise based on on_mismatch.
-        """
+        """Yield one stitched CSV stream: single header row, bodies in sorted path order."""
         base = self.path or "."
         paths = get_csv_paths(
             base,
@@ -212,76 +218,56 @@ class CsvDirFile:
         )
         if not paths:
             return
-            yield  # pragma: no cover
 
-        # Pre-scan headers deterministically
-        header_index: list[tuple[str, list[str]]] = []
-        for p in paths:
-            hs = _read_header(
+        header_index = [
+            (
                 p,
-                encoding=self.encoding,
-                newline=self.newline,
-                delimiter=self.delimiter,
-                quotechar=self.quotechar,
-                escapechar=self.escapechar,
+                _read_header(
+                    p,
+                    encoding=self.encoding,
+                    newline=self.newline,
+                    delimiter=self.delimiter,
+                    quotechar=self.quotechar,
+                    escapechar=self.escapechar,
+                ),
             )
-            header_index.append((p, hs))
+            for p in paths
+        ]
+        hdr_map = dict(header_index)
 
-        # Canonical header
+        # Canonical sequence (aligned with stitching rules in class docstring)
         if self.expected_headers:
             canonical = list(self.expected_headers)
+        elif self.strict_headers:
+            canonical = list(header_index[0][1])
         else:
-            if not header_index:
-                return
-                yield  # pragma: no cover
 
             def _key(hs: list[str]) -> str:
                 return self.delimiter.join(hs)
 
             canonical = min((hs for _, hs in header_index), key=_key)
 
-        # First matching file (for header emission)
-        first_path: str | None = None
-        for p, hs in header_index:
-            if _headers_match_seq(hs, canonical):
-                first_path = p
-                break
-        if first_path is None:
-            if self.on_mismatch == "skip":
-                return
-                yield  # pragma: no cover
-            bad_p, bad_h = header_index[0]
-            raise ValueError(f"Header mismatch in '{bad_p}': expected {canonical} got {bad_h}")
-
-        # Emit header + body of first matching file
-        enc = pick_encoding(first_path, self.encoding, self.newline)
-        with open(first_path, encoding=enc, newline=self.newline) as f:
-            header_line = f.readline()
-            header_line = _strip_bom_from_line(header_line)
-            if header_line and not header_line.endswith(("\n", "\r")):
-                header_line += "\n"
-            if header_line:
-                yield header_line
-            for line in f:
-                yield line
-
-        # Remaining files
-        idx_first = paths.index(first_path)
-        remaining = paths[:idx_first] + paths[idx_first + 1 :]
-        hdr_map = dict(header_index)
-
-        for p in remaining:
+        emitted_header = False
+        for p in paths:
             hs = hdr_map[p]
-            if _headers_match_seq(hs, canonical):
-                enc = pick_encoding(p, self.encoding, self.newline)
-                with open(p, encoding=enc, newline=self.newline) as f:
-                    _ = f.readline()  # skip header
-                    for line in f:
-                        yield line
-            else:
+            if not _headers_match_seq(hs, canonical):
                 if self.on_mismatch == "skip":
                     continue
                 raise ValueError(f"Header mismatch in '{p}': expected {canonical} got {hs}")
+
+            enc = pick_encoding(p, self.encoding, self.newline)
+            with open(p, encoding=enc, newline=self.newline) as f:
+                header_line = f.readline()
+                header_line = _strip_bom_from_line(header_line)
+                if header_line and not header_line.endswith(("\n", "\r")):
+                    header_line += "\n"
+
+                if not emitted_header:
+                    if header_line:
+                        yield header_line
+                    emitted_header = True
+                # else: header line discarded; body streamed next
+                yield from f
 
 
 __all__ = ["CsvDirFile"]

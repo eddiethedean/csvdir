@@ -36,16 +36,19 @@ def get_csv_paths(
     path = os.fspath(path or ".")
     results: list[str] = []
     if recurse:
-        for dirpath, dirnames, filenames in os.walk(path):
-            if not include_hidden:
-                # Avoid descending into hidden directories
-                dirnames[:] = [d for d in dirnames if not d.startswith(".")]
-            for fn in filenames:
-                if not include_hidden and fn.startswith("."):
-                    continue
-                fp = os.path.join(dirpath, fn)
-                if _has_extension(fp, extension, case_insensitive=case_insensitive):
-                    results.append(fp)
+        try:
+            for dirpath, dirnames, filenames in os.walk(path):
+                if not include_hidden:
+                    # Avoid descending into hidden directories
+                    dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+                for fn in filenames:
+                    if not include_hidden and fn.startswith("."):
+                        continue
+                    fp = os.path.join(dirpath, fn)
+                    if _has_extension(fp, extension, case_insensitive=case_insensitive):
+                        results.append(fp)
+        except FileNotFoundError:
+            return []
     else:
         try:
             for fn in os.listdir(path):

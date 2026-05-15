@@ -4,7 +4,7 @@ description: csvdir — read every CSV in a directory with one iterator. Install
 
 # csvdir
 
-**Read every CSV in a directory as one stream of rows.** Treat a folder of CSV files as one dataset — discovery, headers, chunking, and optional [pandas](https://pandas.pydata.org/) integration with zero runtime dependencies.
+**Read every CSV in a directory as one stream of rows.** Treat a folder of CSV files as one dataset — discovery, headers, chunking (with validated `chunksize`), and optional [pandas](https://pandas.pydata.org/) integration (`CsvDirFile` text stream) with zero runtime dependencies.
 
 !!! warning "Beta software"
 

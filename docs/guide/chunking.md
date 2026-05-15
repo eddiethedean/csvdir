@@ -2,6 +2,8 @@
 
 Use chunking when you want bounded memory — each iteration returns a list of row dicts instead of a single row.
 
+`chunksize` must be a **positive integer** (`>= 1`). `read_dir(..., chunksize=0)`, negative sizes, or `read_dir_chunks(..., chunksize=0)` raise `ValueError`.
+
 ## Enable chunking
 
 ```python

@@ -1,4 +1,11 @@
 import csvdir
+from csvdir.pathing import get_csv_paths
+
+
+def test_missing_directory_returns_empty_paths(tmp_path):
+    missing = str(tmp_path / "does_not_exist")
+    assert get_csv_paths(missing, "csv") == []
+    assert get_csv_paths(missing, "csv", recurse=True) == []
 
 
 def test_recurse_and_include_hidden_and_case_insensitive(tmp_path, write_csv):

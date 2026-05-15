@@ -15,7 +15,7 @@
 | Load huge dirs into memory | `chunksize=` streams `list[dict]` batches |
 | Awkward pandas glue code | `CsvDirFile` works with `pandas.read_csv` |
 
-**Includes:** row and chunked iterators, `.with_names()` / `.with_paths()`, column helpers, recursive discovery, per-file encoding and quote sniffing. Details and parameter tables live in the docs.
+**Includes:** row and chunked iterators, `.with_names()` / `.with_paths()`, column helpers, recursive discovery, per-file encoding and quote sniffing. Dict iterators compare header **names as sets**; `CsvDirFile` (pandas) stitches using header **sequence** and sorted path order — see docs.
 
 ## Requirements
 

@@ -40,7 +40,7 @@ Also allows descending into hidden directories when `recurse=True`.
 
 ## Missing directory
 
-If `path` does not exist, discovery returns an **empty list** — iteration yields nothing and does not raise.
+If `path` does not exist, discovery returns an **empty list** — iteration yields nothing and does not raise — with or without **`recurse=True`** (consistent with listing the top level).
 
 ## Sort order
 

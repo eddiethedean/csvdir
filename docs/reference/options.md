@@ -13,8 +13,8 @@ All parameters below are **keyword-only** after `path` (where `path` is accepted
 | `newline` | `str` | `""` | Newline argument to `open()` |
 | `quotechar` | `str` | `'"'` | Fallback quote character |
 | `escapechar` | `str \| None` | `None` | CSV escape character |
-| `chunksize` | `int \| None` | `None` | If set, return `CsvChunksDir` |
-| `strict_headers` | `bool` | `False` | Lock schema from first file |
+| `chunksize` | `int \| None` | `None` | If set and ≥ 1, return `CsvChunksDir`; omit or use chunking factories only when size is positive (invalid values raise `ValueError`). |
+| `strict_headers` | `bool` | `False` | Pin column **set** from the first sorted file for that iteration only; does not mutate `expected_headers`. Order of columns across files is ignored ([Headers](../guide/headers.md)). |
 | `expected_headers` | `list[str] \| None` | `None` | Explicit required columns |
 | `on_mismatch` | `"error" \| "skip"` | `"error"` | Header mismatch policy |
 | `recurse` | `bool` | `False` | Walk subdirectories |
@@ -25,7 +25,7 @@ All parameters below are **keyword-only** after `path` (where `path` is accepted
 
 Same as above except:
 
-- `chunksize` is **required** (default `1000` in the factory signature)
+- `chunksize` must be ≥ 1 (`read_dir_chunks` default is `1000`; values less than 1 raise `ValueError`)
 - Always returns `CsvChunksDir`
 
 ## `CsvDirFile`
@@ -39,8 +39,8 @@ Same as above except:
 | `escapechar` | `str \| None` | `None` | Escape character |
 | `encoding` | `str` | `"utf-8"` | Preferred encoding |
 | `newline` | `str` | `""` | Newline for `open()` |
-| `strict_headers` | `bool` | `False` | API symmetry (see headers guide) |
-| `expected_headers` | `list[str] \| None` | `None` | Canonical header sequence |
+| `strict_headers` | `bool` | `False` | Canonical **header sequence**: first scanned file after sorting when set, unless `expected_headers` is given ([Headers](../guide/headers.md)); file naming determines which path sorts first |
+| `expected_headers` | `list[str] \| None` | `None` | Canonical header sequence (names and order) |
 | `on_mismatch` | `str` | `"error"` | `"error"` or `"skip"` |
 | `recurse` | `bool` | `False` | Recursive discovery |
 | `case_insensitive` | `bool` | `True` | Extension matching |

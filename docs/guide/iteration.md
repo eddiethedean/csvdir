@@ -19,6 +19,10 @@ for row in reader:
 | `None` (default) | `CsvDir` | `dict[str, str]` |
 | positive `int` | `CsvChunksDir` | `list[dict[str, str]]` |
 
+!!! note "`chunksize` must be positive"
+
+    `chunksize` `0`, negative integers, or any value `< 1` raise `ValueError` with message `chunksize must be a positive integer`.
+
 ## Row shape
 
 Every row is a plain dictionary:
@@ -32,7 +36,9 @@ Every row is a plain dictionary:
 
 ## File order
 
-Paths come from `pathing.get_csv_paths`, which returns a **sorted** list. Order is stable across runs on the same filesystem.
+Paths come from `pathing.get_csv_paths`, which returns a **sorted** list. Order is stable across runs on the same filesystem. `CsvDirFile` emits stitched body lines in this same sorted order ([pandas](pandas.md)).
+
+For how header **names** are compared across files (`read_dir`) vs stitched **sequences** (`CsvDirFile`), see [Headers](headers.md).
 
 ## Properties
 

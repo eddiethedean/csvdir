@@ -67,8 +67,13 @@ def read_dir(
 
     Returns {class}`~csvdir.chunks_dir.CsvChunksDir` when ``chunksize`` is set,
     otherwise {class}`~csvdir.dir_reader.CsvDir`.
+
+    Raises:
+        ValueError: if ``chunksize`` is not ``None`` and is less than ``1``.
     """
-    if chunksize:
+    if chunksize is not None:
+        if chunksize <= 0:
+            raise ValueError("chunksize must be a positive integer")
         return CsvChunksDir(
             chunksize,
             path,
