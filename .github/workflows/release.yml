@@ -1,13 +1,16 @@
-# Publish to PyPI when a GitHub Release is published.
+# Publish to PyPI when a version tag is pushed (e.g. git push origin v0.9.0).
+# Optional: create a GitHub Release from that tag for release notes — it does not re-run this workflow.
+#
 # Requirements:
-#   - Repository secret: PYPI_API_TOKEN (PyPI → Account → API tokens → token for this project)
-#   - Release tag should match `version` in pyproject.toml (e.g. tag v0.9.0 ↔ version "0.9.0")
+#   - Repository secret: PYPI_API_TOKEN (PyPI → API tokens → scoped to this project)
+#   - Tag must match pyproject.toml version (e.g. v0.9.0 ↔ version = "0.9.0")
 
 name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: read
@@ -59,10 +62,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify release tag matches pyproject.toml
+      - name: Verify tag matches pyproject.toml
         run: |
           set -euo pipefail
-          TAG="${{ github.event.release.tag_name }}"
+          TAG="${{ github.ref_name }}"
           TAG_VER="${TAG#v}"
           PROJ_VER=$(python - <<'PY'
           import re
@@ -75,7 +78,7 @@ jobs:
           PY
           )
           if [ "$TAG_VER" != "$PROJ_VER" ]; then
-            echo "::error::Release tag '$TAG' (version '$TAG_VER') does not match pyproject.toml version '$PROJ_VER'"
+            echo "::error::Tag '$TAG' (version '$TAG_VER') does not match pyproject.toml version '$PROJ_VER'"
             exit 1
           fi
           echo "OK: tag version $TAG_VER matches pyproject.toml"

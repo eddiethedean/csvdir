@@ -57,8 +57,8 @@ Docs are built on [Read the Docs](https://csvdir.readthedocs.io/) from `.readthe
 
 1. Confirm **`csvdir/__init__.py`** `__version__` matches **`pyproject.toml`** `[project] version`.
 2. Update **[CHANGELOG](CHANGELOG.md)** for the release: one `## x.y.z` section with user-facing notes.
-3. Merge to `main`, then push a **Git tag** `vX.Y.Z` that matches the version (e.g. `v0.9.0` ↔ `0.9.0` in `pyproject.toml`).
-4. On GitHub: **Create a new Release** from that tag and **Publish** it. The **[Release workflow](https://github.com/eddiethedean/csvdir/actions)** (`.github/workflows/release.yml`) runs the same checks as CI, verifies the tag matches `pyproject.toml`, builds the sdist/wheel, and uploads to PyPI using the repository secret **`PYPI_API_TOKEN`** (set under *Settings → Secrets and variables → Actions*).
+3. Push a **Git tag** `vX.Y.Z` that matches `pyproject.toml` (e.g. `git tag v0.9.0 && git push origin v0.9.0`). Pushing the tag runs **[Release](https://github.com/eddiethedean/csvdir/actions)** (`.github/workflows/release.yml`): same checks as CI, tag/version check, then PyPI upload via secret **`PYPI_API_TOKEN`** (*Settings → Secrets and variables → Actions*).
+4. Optionally create a **GitHub Release** from that tag for release notes (the Release workflow is **not** tied to the Release UI — only the tag push matters).
 5. Confirm Read the Docs builds **`latest`** (and any versioned doc build you use).
 
 To publish manually instead: `python -m build` then `twine upload dist/*`.
