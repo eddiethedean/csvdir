@@ -117,7 +117,9 @@ class CsvDirFile:
             chunks = [self._buf]
             self._pos += len(self._buf)
             self._buf = ""
-            for line in self._gen:  # type: ignore[arg-type]
+            gen = self._gen
+            assert gen is not None
+            for line in gen:
                 chunks.append(line)
                 self._pos += len(line)
             return "".join(chunks)

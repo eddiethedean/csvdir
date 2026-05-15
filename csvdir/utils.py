@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import csv
+from collections.abc import Sequence
 
 
-def strip_bom_from_headers(cols: list[str]) -> list[str]:
+def strip_bom_from_headers(cols: Sequence[str]) -> list[str]:
     """Remove a UTF-8 BOM marker from the start of header names."""
     return [c.lstrip("\ufeff") if isinstance(c, str) else c for c in cols]
 
@@ -63,7 +64,7 @@ def sniff_quotechar(
         dialect = csv.Sniffer().sniff(sample, delimiters=delimiter)
         qc = getattr(dialect, "quotechar", None)
         if qc:
-            return qc
+            return str(qc)
     except Exception:
         pass
 

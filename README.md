@@ -189,6 +189,21 @@ print(df.head())
 
 ---
 
+## Development
+
+Requires Python 3.10+.
+
+```bash
+pip install -e ".[dev]"
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
+ruff check csvdir tests && ruff format csvdir tests
+mypy
+```
+
+CI runs ruff, mypy, and pytest on push and pull requests.
+
+---
+
 ## 📜 License  
 
 MIT License © 2025–2026  
