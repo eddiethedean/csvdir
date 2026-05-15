@@ -29,9 +29,12 @@ mypy
 ## Build documentation locally
 
 ```bash
+pip install -e ".[docs]"
 sphinx-build -W -b html docs docs/_build/html
 open docs/_build/html/index.html
 ```
+
+CI runs the same `sphinx-build -W` command on every push (see the `check` job).
 
 Live reload (optional):
 

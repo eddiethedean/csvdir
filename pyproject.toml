@@ -31,10 +31,9 @@ dev = [
     "mypy>=1.13",
 ]
 docs = [
-    "sphinx>=8",
+    "sphinx>=8,<10",
     "furo>=2024.8.6",
     "myst-parser>=4",
-    "sphinx-autodoc-typehints>=2",
 ]
 
 [project.urls]
