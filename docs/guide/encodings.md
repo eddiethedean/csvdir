@@ -8,7 +8,7 @@ csvdir handles messy real-world CSV files per file — encoding and quote charac
 read_dir("/data", encoding="utf-8")
 ```
 
-Each file is opened using {func}`~csvdir.utils.pick_encoding`, which:
+Each file is opened using `utils.pick_encoding`, which:
 
 1. Tries the preferred encoding
 2. Falls back through `utf-8`, `utf-8-sig`, `utf-16-le`, `utf-16-be`
@@ -23,11 +23,11 @@ UTF-8 BOM markers are stripped from **header names** after read:
 # Yielded dict keys: "id", "name"
 ```
 
-{class}`~csvdir.CsvDirFile` also strips BOM from the emitted header **line** in the stitched stream.
+`CsvDirFile` also strips BOM from the emitted header **line** in the stitched stream.
 
 ## Quote character sniffing
 
-{func}`~csvdir.utils.sniff_quotechar` inspects a sample of each file:
+`utils.sniff_quotechar` inspects a sample of each file:
 
 1. Prefer a quote char that wraps fields containing the delimiter
 2. Try `csv.Sniffer`
@@ -65,7 +65,7 @@ This is supported: each file is opened with its own detected encoding. There is 
 
 | Function | Role |
 |----------|------|
-| {func}`~csvdir.utils.pick_encoding` | Choose encoding for a path |
-| {func}`~csvdir.utils.sniff_quotechar` | Detect quote character |
-| {func}`~csvdir.utils.read_header` | Read header row with detection |
-| {func}`~csvdir.utils.strip_bom_from_headers` | Clean header list |
+| `utils.pick_encoding` | Choose encoding for a path |
+| `utils.sniff_quotechar` | Detect quote character |
+| `utils.read_header` | Read header row with detection |
+| `utils.strip_bom_from_headers` | Clean header list |

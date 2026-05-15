@@ -1,0 +1,20 @@
+/* csvdir docs — light touch on Material defaults */
+:root {
+  --csvdir-accent: #4db6ac;
+}
+
+[data-md-color-scheme="default"] {
+  --md-accent-fg-color: var(--csvdir-accent);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-accent-fg-color: #80cbc4;
+}
+
+.md-typeset {
+  font-size: 0.95rem;
+}
+
+.md-typeset h1 {
+  font-weight: 600;
+}

@@ -31,9 +31,10 @@ dev = [
     "mypy>=1.13",
 ]
 docs = [
-    "sphinx>=8,<10",
-    "furo>=2024.8.6",
-    "myst-parser>=4",
+    "mkdocs>=1.6",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.27",
+    "mkdocs-autorefs>=1.2",
 ]
 
 [project.urls]

@@ -1,4 +1,0 @@
-# Installed via pip install -e ".[docs]"
-sphinx>=8,<10
-furo>=2024.8.6
-myst-parser>=4

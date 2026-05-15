@@ -29,18 +29,15 @@ mypy
 ## Build documentation locally
 
 ```bash
-pip install -e ".[docs]"
-sphinx-build -W -b html docs docs/_build/html
-open docs/_build/html/index.html
+python -m mkdocs build --strict
+open site/index.html
 ```
-
-CI runs the same `sphinx-build -W` command on every push (see the `check` job).
 
 Live reload (optional):
 
 ```bash
-pip install sphinx-autobuild
-sphinx-autobuild docs docs/_build/html --open-browser
+pip install mkdocs
+python -m mkdocs serve
 ```
 
 ## Continuous integration
@@ -49,23 +46,21 @@ GitHub Actions (see [`.github/workflows/ci.yml`](https://github.com/eddiethedean
 
 | Job | Steps |
 |-----|-------|
-| `check` | ruff, mypy |
+| `check` | ruff, mypy, `mkdocs build --strict` |
 | `test` | pytest on Python 3.10–3.13 |
 
 ## Documentation hosting
 
-Docs are built on [Read the Docs](https://csvdir.readthedocs.io/) from `.readthedocs.yaml` using Sphinx, the [Furo](https://pradyunsg.me/furo/) theme, and [MyST](https://myst-parser.readthedocs.io/) Markdown — same stack as the [StreamTree docs](https://streamtree.readthedocs.io/en/latest/).
-
-Open a pull request to trigger an RTD preview build when configured in the project dashboard.
+Docs are built on [Read the Docs](https://csvdir.readthedocs.io/) from `.readthedocs.yml` using **MkDocs Material** and **mkdocstrings** — the same stack as [StreamTree](https://github.com/eddiethedean/streamtree).
 
 ## Release checklist
 
 1. Update version in `csvdir/__init__.py` and `pyproject.toml`
-2. Update [CHANGELOG](CHANGELOG)
-3. Run tests, ruff, mypy, and `sphinx-build -W`
+2. Update [CHANGELOG](CHANGELOG.md)
+3. Run tests, ruff, mypy, and `python -m mkdocs build --strict`
 4. Tag and publish to PyPI
 5. Confirm RTD builds `latest`
 
 ## Repository README
 
-Contributing conventions, badges, and quick usage live in the canonical [README on GitHub](https://github.com/eddiethedean/csvdir/blob/main/README.md).
+Contributing conventions, badges, and quick usage live in the **canonical [README on GitHub](https://github.com/eddiethedean/csvdir/blob/main/README.md)**.

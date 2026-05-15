@@ -26,7 +26,7 @@ All parameters below are **keyword-only** after `path` (where `path` is accepted
 Same as above except:
 
 - `chunksize` is **required** (default `1000` in the factory signature)
-- Always returns {class}`~csvdir.CsvChunksDir`
+- Always returns `CsvChunksDir`
 
 ## `CsvDirFile`
 

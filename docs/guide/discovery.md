@@ -52,9 +52,9 @@ Lower-level helpers in `csvdir.pathing`:
 
 | Function | Purpose |
 |----------|---------|
-| {func}`~csvdir.pathing.get_csv_paths` | List paths with given extension |
-| {func}`~csvdir.pathing.get_name` | Stem from a path |
-| {func}`~csvdir.pathing._has_extension` | Extension check helper |
+| `pathing.get_csv_paths` | List paths with given extension |
+| `pathing.get_name` | Stem from a path |
+| `pathing._has_extension` | Extension check helper |
 
 ## Examples
 

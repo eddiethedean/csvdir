@@ -2,7 +2,7 @@
 
 ## `read_dir`
 
-{func}`~csvdir.read_dir` is the main entry point. It discovers CSV files under `path` (default `"."`) and returns either a {class}`~csvdir.CsvDir` or {class}`~csvdir.CsvChunksDir` depending on `chunksize`.
+`read_dir` is the main entry point. It discovers CSV files under `path` (default `"."`) and returns either a `CsvDir` or `CsvChunksDir` depending on `chunksize`.
 
 ```python
 from csvdir import read_dir
@@ -16,8 +16,8 @@ for row in reader:
 
 | `chunksize` | Type | Each iteration yields |
 |-------------|------|------------------------|
-| `None` (default) | {class}`~csvdir.CsvDir` | `dict[str, str]` |
-| positive `int` | {class}`~csvdir.CsvChunksDir` | `list[dict[str, str]]` |
+| `None` (default) | `CsvDir` | `dict[str, str]` |
+| positive `int` | `CsvChunksDir` | `list[dict[str, str]]` |
 
 ## Row shape
 
@@ -32,11 +32,11 @@ Every row is a plain dictionary:
 
 ## File order
 
-Paths come from {func}`~csvdir.pathing.get_csv_paths`, which returns a **sorted** list. Order is stable across runs on the same filesystem.
+Paths come from `pathing.get_csv_paths`, which returns a **sorted** list. Order is stable across runs on the same filesystem.
 
 ## Properties
 
-On {class}`~csvdir.CsvDir` (and the chunked reader):
+On `CsvDir` (and the chunked reader):
 
 - **`paths`** — `list[str]` of absolute or relative paths to matched files
 - **`names`** — `list[str]` of filename stems (extension removed)
@@ -53,7 +53,7 @@ Helper methods return **new** iterator objects that share the same configuration
 
 ### `with_names()` / `enumerate()`
 
-Alias pair on {class}`~csvdir.CsvDir`. Yields `(stem, row)`:
+Alias pair on `CsvDir`. Yields `(stem, row)`:
 
 ```python
 for stem, row in read_dir("/data").with_names():
@@ -90,4 +90,4 @@ Use whichever style reads clearer in your codebase.
 
 Iterator objects read from disk lazily. To scan the directory again, create a new `read_dir(...)` call or re-instantiate helpers like `.with_names()`.
 
-{class}`~csvdir.CsvDirFile` supports `seek(0)` to restart the concatenated stream (see {doc}`pandas`).
+`CsvDirFile` supports `seek(0)` to restart the concatenated stream (see [pandas](pandas.md)).

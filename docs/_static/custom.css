@@ -1,8 +1,0 @@
-/* Landing-page card list (StreamTree-style index) */
-article[role="main"] > section > ul > li > p {
-  margin-bottom: 0.25rem;
-}
-
-article[role="main"] > section > ul > li > hr {
-  margin: 0.5rem 0 0.75rem;
-}

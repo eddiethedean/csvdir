@@ -2,12 +2,10 @@
 
 csvdir discovers CSV files in a directory and yields each row as a `dict[str, str]` — or in fixed-size chunks when you set `chunksize`. No manual `glob`, no per-file `open` loops.
 
-```{admonition} Requirements
-:class: note
+!!! note "Requirements"
 
-- Python 3.10+
-- No third-party runtime dependencies (pandas is optional for {class}`~csvdir.CsvDirFile`)
-```
+    - **Python** 3.10+
+    - No third-party runtime dependencies (pandas is optional for `CsvDirFile`)
 
 ## Install
 
@@ -27,7 +25,7 @@ Optional groups:
 
 ```bash
 pip install -e ".[dev]"   # pytest, ruff, mypy
-pip install -e ".[docs]"  # Sphinx, Furo, MyST
+pip install -e ".[docs]"  # MkDocs Material + mkdocstrings
 pip install pandas        # only for pandas.read_csv + CsvDirFile
 ```
 
@@ -37,7 +35,7 @@ pip install pandas        # only for pandas.read_csv + CsvDirFile
 2. Iterate rows — one `dict` per CSV row, all files in sorted path order.
 3. Optionally attach file labels with `.with_names()` or `.with_paths()`, or batch rows with `chunksize`.
 
-The [Iteration guide](guide/iteration.md) walks through discovery order, properties, and helper iterators.
+The **[Iteration guide](guide/iteration.md)** walks through discovery order, properties, and helper iterators.
 
 ## First script
 
@@ -68,8 +66,8 @@ for stem, row in read_dir("/data/csvs").with_names():
 | Encodings and quoting | [Encodings](guide/encodings.md) |
 | pandas integration | [Pandas](guide/pandas.md) |
 | All parameters | [Configuration](reference/options.md) |
-| Autodoc | [API reference](reference/index.md) |
+| Autodoc | [API reference](reference/api.md) |
 
 ## Repository README
 
-Install matrices, usage tables, CI badges, and GitHub doc links live in the canonical [README on GitHub](https://github.com/eddiethedean/csvdir/blob/main/README.md) so PyPI and the repo stay in sync.
+Install matrices, usage tables, CI badges, and GitHub doc links live in the **canonical [README on GitHub](https://github.com/eddiethedean/csvdir/blob/main/README.md)** so PyPI and the repo stay in sync.

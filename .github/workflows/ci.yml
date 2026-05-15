@@ -21,8 +21,8 @@ jobs:
         run: ruff check csvdir tests && ruff format --check csvdir tests
       - name: Mypy
         run: mypy
-      - name: Sphinx (warnings as errors)
-        run: sphinx-build -W -b html docs docs/_build/html
+      - name: MkDocs (strict)
+        run: python -m mkdocs build --strict
 
   test:
     runs-on: ubuntu-latest

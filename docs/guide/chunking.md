@@ -59,7 +59,7 @@ for stem, rows in r.enumerate().select_columns_chunks(["id", "amount"]):
     ...
 ```
 
-See {doc}`columns` for label semantics (`stem` vs full path).
+See [columns](columns.md) for label semantics (`stem` vs full path).
 
 ## When to choose chunk size
 

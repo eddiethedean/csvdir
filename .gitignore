@@ -57,6 +57,7 @@ Thumbs.db
 
 # Documentation builds
 docs/_build/
+site/
 
 # Local / misc
 notebooks/

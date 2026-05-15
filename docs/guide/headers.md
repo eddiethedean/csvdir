@@ -63,14 +63,14 @@ ValueError: Header mismatch in '/data/bad.csv': missing columns: ['age']; extra 
 
 ## `CsvDirFile` (pandas) — different rules
 
-{class}`~csvdir.CsvDirFile` compares headers **in order** (sequence-sensitive) when stitching files. It also picks a **canonical** header row:
+`CsvDirFile` compares headers **in order** (sequence-sensitive) when stitching files. It also picks a **canonical** header row:
 
 - If `expected_headers` is set, that list is canonical.
 - Otherwise the lexicographically smallest header (joined by `delimiter`) among discovered files is chosen.
 
 The first file whose header **exactly matches** the canonical sequence supplies the emitted header line; other matching files have their header line skipped. Non-matching files are skipped or raise according to `on_mismatch`.
 
-For dict-based iteration, prefer {class}`~csvdir.CsvDir` semantics. For pandas, understand that column **order** matters in the stitched stream.
+For dict-based iteration, prefer `CsvDir` semantics. For pandas, understand that column **order** matters in the stitched stream.
 
 ## Recipes
 

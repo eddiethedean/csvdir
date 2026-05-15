@@ -24,4 +24,4 @@ Step-by-step documentation for every major feature. Start with [Getting started]
 | Page | Topics |
 |------|--------|
 | [Configuration](../reference/options.md) | Full parameter tables |
-| [API reference](../reference/index.md) | Autodoc for all public symbols |
+| [API reference](../reference/api.md) | Autodoc for all public symbols |

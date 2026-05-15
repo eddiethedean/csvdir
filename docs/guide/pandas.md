@@ -1,6 +1,6 @@
 # Pandas integration
 
-{class}`~csvdir.CsvDirFile` exposes a **single concatenated CSV byte stream** suitable for {func}`pandas.read_csv`.
+`CsvDirFile` exposes a **single concatenated CSV byte stream** suitable for `pandas.read_csv`.
 
 ## Basic usage
 
@@ -23,8 +23,8 @@ pandas is an **optional** dependency — install separately (`pip install pandas
 
 ## What `CsvDirFile` does
 
-1. Discover CSV files (same rules as {class}`~csvdir.CsvDir`).
-2. Choose a **canonical header** (see {doc}`headers`).
+1. Discover CSV files (same rules as `CsvDir`).
+2. Choose a **canonical header** (see [headers](headers.md)).
 3. Emit the header line once from the first matching file.
 4. Stream body lines from each file; skip duplicate header lines when they match exactly.
 
@@ -60,7 +60,7 @@ CsvDirFile(
 )
 ```
 
-Header matching for stitching is **order-sensitive** (unlike dict iterators). See {doc}`headers`.
+Header matching for stitching is **order-sensitive** (unlike dict iterators). See [headers](headers.md).
 
 ## Restarting reads
 
@@ -73,7 +73,7 @@ df2 = pd.read_csv(f)
 
 ## Alternatives
 
-If you need per-file control or set-based header checks, iterate with {class}`~csvdir.CsvDir` and build DataFrames per file:
+If you need per-file control or set-based header checks, iterate with `CsvDir` and build DataFrames per file:
 
 ```python
 import pandas as pd
