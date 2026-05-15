@@ -1,21 +1,24 @@
 # Changelog
 
-## 0.9.1 (unreleased)
-
-- **Breaking (stitch semantics):** `CsvDirFile` now streams bodies in sorted path order (aligned with dict iterators); canonical header picking honors `strict_headers` (first discovered file defines column order unless `expected_headers` is set). Error/skip sequencing follows path order strictly.
-- `read_dir` / `read_dir_chunks` reject non-positive `chunksize` with `ValueError`.
-- Recursive `get_csv_paths` mirrors flat mode and returns `[]` when `path` does not exist.
-- `CsvDir` iteration no longer mutates `expected_headers` when pinning `strict_headers` schema internally.
-- Guides and configuration reference refreshed: `chunksize` validation, missing-directory recursion, set vs sequence headers (`read_dir` vs `CsvDirFile`), stitched row order, and pandas workaround example.
-
 ## 0.9.0
 
-- Require Python 3.10+
-- Modern packaging (PEP 621, SPDX license, typed package)
-- CI with ruff, mypy, and pytest on 3.10–3.13
-- Remove unused `iterators.py` and `chunks_iterators.py` modules
-- `read_dir` overloads for clearer return types
-- Documentation on Read the Docs (MkDocs/material + mkdocstrings)
+### Breaking changes
+
+- **`CsvDirFile`:** Stitched body lines stream in **sorted file path order** (aligned with `read_dir`). Canonical header sequence: `expected_headers` if set; else **`strict_headers`** uses the first sorted discovered file; else lexicographically smallest joined header. Match / error / skip behavior follows that path order — callers relying on the previous “emit first matching file out of order” behavior must adapt.
+
+### Additions and fixes
+
+- **`read_dir` / `read_dir_chunks` / `CsvChunksDir`:** Non-positive `chunksize` raises `ValueError`.
+- **`get_csv_paths`:** Recursive discovery returns an empty list when `path` does not exist (same as non-recursive).
+- **`CsvDir`:** `strict_headers` pins the schema for the iteration without mutating `expected_headers`.
+
+### Packaging, tooling, and docs
+
+- Require Python **3.10+**; PEP 621 / SPDX metadata; typed package.
+- CI: ruff, mypy, pytest on 3.10–3.13; `mkdocs build --strict` on docs.
+- Remove unused `iterators.py` and `chunks_iterators.py`.
+- `read_dir` overloads for clearer return types.
+- Documentation on Read the Docs: **MkDocs Material** + **mkdocstrings** (guides, options reference, set vs sequence headers for dict readers vs `CsvDirFile`, pandas example).
 
 ## 0.8.0
 
