@@ -3,7 +3,7 @@
 [![CI](https://github.com/eddiethedean/csvdir/actions/workflows/ci.yml/badge.svg)](https://github.com/eddiethedean/csvdir/actions/workflows/ci.yml)
 [![Docs](https://readthedocs.org/projects/csvdir/badge/?version=latest)](https://csvdir.readthedocs.io/en/latest/)
 [![PyPI](https://img.shields.io/pypi/v/csvdir.svg)](https://pypi.org/project/csvdir/)
-[![Python](https://img.shields.io/python/required-version-toml?tomlURL=https%3A%2F%2Fraw.githubusercontent.com%2Feddiethedean%2Fcsvdir%2Fmain%2Fpyproject.toml)](https://github.com/eddiethedean/csvdir/blob/main/pyproject.toml)
+[![Python](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Feddiethedean%2Fcsvdir%2Fmain%2Fpyproject.toml)](https://github.com/eddiethedean/csvdir/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/eddiethedean/csvdir/blob/main/LICENSE)
 
 Read every CSV in a directory as one stream of rows — no manual file loops, no header surprises.
